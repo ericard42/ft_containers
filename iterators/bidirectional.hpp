@@ -1,0 +1,4 @@
+#ifndef BIDIRECTIONAL_HPP
+#define BIDIRECTIONAL_HPP
+
+#endif
