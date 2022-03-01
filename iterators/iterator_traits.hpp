@@ -1,7 +1,6 @@
 #ifndef ITERATOR_TRAITS_HPP
 #define ITERATOR_TRAITS_HPP
 
-#include "iterator.hpp"
 #include "../includes/ft_stddef.hpp"
 #include "iterator_tags.hpp"
 
