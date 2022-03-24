@@ -2,6 +2,7 @@
 #define REVERSE_ITERATOR_HPP
 
 #include "iterator_traits.hpp"
+#include "iterator.hpp"
 
 namespace ft {
 
@@ -12,18 +13,17 @@ namespace ft {
 									typename ft::iterator_traits<Iterator>::difference_type,
 									typename ft::iterator_traits<Iterator>::pointer,
 									typename ft::iterator_traits<Iterator>::reference > {
+		protected :
+			Iterator _current;
+
 		public :
 			typedef	Iterator iterator_type;
-			typedef typename ft::iterator_traits<Iterator>::iterator_category iterator_category;
-			typedef typename ft::iterator_traits<Iterator>::value_type value_type;
-			typedef typename ft::iterator_traits<Iterator>::difference_type difference_type;
-			typedef typename ft::iterator_traits<Iterator>::pointer pointer;
-			typedef typename ft::iterator_traits<Iterator>::reference reference;
 
-			reverse_iterator() {} //Constructor
-			explicit reverse_iterator(iterator_type it) : _current(iterator_type(it)){} //Initialization constructor
+			reverse_iterator() : _current() {} //Constructor
+			explicit reverse_iterator(iterator_type it) : _current(it){} //Initialization constructor
+			reverse_iterator(const reverse_iterator &rev_it) : _current(rev_it._current) {} //Normal Copy Constructor
 			template <class Iter>
-			reverse_iterator(const reverse_iterator<Iter>& rev_it) {*this = rev_it;} //Copy constructor
+			reverse_iterator(const reverse_iterator<Iter> &rev_it) : _current(rev_it.base()) {} //Other Type Copy constructor
 			~reverse_iterator() {} //Destructor
 
 			//Accesses the underlying iterator
@@ -32,8 +32,8 @@ namespace ft {
 			}
 			//Accesses the pointed-to element
 			reference operator*() const {
-				Iterator d_tmp = base();
-				--d_tmp;
+				Iterator d_tmp = _current;
+				d_tmp--;
 				return *d_tmp;
 			}
 			pointer operator->() const {
@@ -77,9 +77,6 @@ namespace ft {
 				_current += n;
 				return *this;
 			}
-
-		protected :
-			Iterator _current;
 	};
 
 	//Advances the iterator
