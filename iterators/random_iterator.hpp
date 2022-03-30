@@ -123,8 +123,8 @@ namespace ft {
 	template <class T>
 	bool operator==(const ft::random_iterator<const T> &lhs,
 					const ft::random_iterator<T> &rhs {
-		return (lhs.base() == rhs.base());*/
-	}
+		return (lhs.base() == rhs.base());
+	}*/
 	//a != b
 	template <class T>
 	bool operator!=(const ft::random_iterator<T> &lhs,

@@ -77,7 +77,7 @@ namespace ft {
 			//destructor
 			~vector() {
 				clear();
-				_alloc.deallocate(_start, capacity());
+				_alloc.deallocate(_first, capacity());
 			}
 
 			//Operator =
@@ -176,7 +176,7 @@ namespace ft {
 						_alloc.construct(_last, *tmp_first++);
 						_last++;
 					}
-					_alloc.deallocate(tmp_last - tmp_size, tmp_capacity);
+					_alloc.deallocate(tmp_last - tmp_size, tmp_max);
 				}
 			}
 
@@ -192,7 +192,8 @@ namespace ft {
 			reference at(size_type n) {
 				if (n >= size())
 				{
-					std::ostringstream oss << n;
+					std::ostringstream oss;
+					oss << n;
 					std::string s_n = oss.str();
 					oss << size();
 					std::string s_size = oss.str();
@@ -204,7 +205,8 @@ namespace ft {
 			const_reference at(size_type n) const {
 				if (n >= size())
 				{
-					std::ostringstream oss << n;
+					std::ostringstream oss;
+					oss << n;
 					std::string s_n = oss.str();
 					oss << size();
 					std::string s_size = oss.str();
@@ -222,7 +224,7 @@ namespace ft {
 			}
 
 			reference back() {
-				return (*(_last -1 ));
+				return (*(_last - 1));
 			}
 			const_reference back() const {
 				return (*(_last - 1));
@@ -234,11 +236,11 @@ namespace ft {
 			void assign(InputIterator first, InputIterator last) {
 				clear();
 				difference_type n = ft::distance(first, last);
-				if (n == 0)
+				if (n <= 0)
 					return ;
 				if (size() + n <= capacity())
 				{
-					for (size_type i = 0; i < n)
+					for (size_type i = 0; i < n; i++)
 					{
 						_alloc.construct(_last, *first++);
 						_last++;
@@ -259,7 +261,7 @@ namespace ft {
 			}
 			void assign(size_type n, const value_type &val) {
 				clear();
-				if (n == 0)
+				if (n <= 0)
 					return ;
 				if (size() + n <= capacity())
 				{
@@ -277,14 +279,14 @@ namespace ft {
 					_last = _first;
 					for (size_type i = 0; i < n; i++)
 					{
-						_alloc.construct(_last, val)
+						_alloc.construct(_last, val);
 						_last++;
 					}
 				}
 			}
 
 			void push_back(const value_type &val) {
-				if (_last == _max)
+				if (size() == capacity())
 				{
 					size_type new_max;
 					if (size() > 0)
@@ -306,10 +308,10 @@ namespace ft {
 
 			}
 			void insert(iterator  position, size_type n, const value_type &val) {
-				if (n == 0)
+				if (n <= 0)
 					return;
 				if (n > max_size())
-					throw (std::lenght_error("vector::fill_insert"));
+					throw (std::length_error("vector::fill_insert"));
 			}
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last) {
@@ -393,7 +395,7 @@ namespace ft {
 
 	//Swap
 	template <class T, class Alloc>
-	void swap(vector<T, Alloc> &x. vector<T, Alloc> &y) {
+	void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) {
 		x.swap(y);
 	}
 }
