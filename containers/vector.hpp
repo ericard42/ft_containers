@@ -42,9 +42,9 @@ namespace ft {
 																				_last(0),
 																				_max(0) {
 				_first = _alloc.allocate(n);
-				_max = _first + n;
+				_max = n;
 				_last = _first;
-				while (_last != _max)
+				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.construct(_last, val);
 					_last++;
@@ -57,11 +57,11 @@ namespace ft {
 				   														_first(0),
 																		_last(0),
 																		_max(0) {
-				difference_type n = ft::distance(first, last);
+				size_type n = last - first;
 				_first = _alloc.allocate(n);
-				_max = _first + n;
+				_max = n;
 				_last = _first;
-				while (first != last)
+				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.construct(_last, *first++);
 					_last++;
@@ -77,7 +77,7 @@ namespace ft {
 			//destructor
 			~vector() {
 				clear();
-				_alloc.deallocate(_first, capacity());
+				_alloc.deallocate(_first, _max);
 			}
 
 			//Operator =
@@ -98,13 +98,9 @@ namespace ft {
 			}
 
 			iterator end() {
-				if (empty() == true)
-					return (begin());
 				return (_last);
 			}
 			const_iterator end() const {
-				if (empty() == true)
-					return (begin());
 				return (_last);
 			}
 
@@ -148,7 +144,7 @@ namespace ft {
 			}
 
 			size_type capacity() const {
-				return (_max - _first);
+				return (_max);
 			}
 
 			bool empty() const {
@@ -161,22 +157,21 @@ namespace ft {
 			void reserve(size_type n) {
 				if (n > max_size())
 					throw (std::length_error("vector::reserve"));
-				else if (n > capacity())
+				else if (n > _max)
 				{
 					pointer tmp_first = _first;
 					pointer tmp_last = _last;
-					size_type tmp_size = size();
-					size_type tmp_max = capacity();
+					size_type tmp_max = _max;
 
 					_first = _alloc.allocate(n);
-					_max = _first + n;
+					_max = n;
 					_last = _first;
-					while (tmp_first != tmp_last)
+					for (size_type i = 0; (tmp_first + i) != tmp_last; i++)
 					{
-						_alloc.construct(_last, *tmp_first++);
+						_alloc.construct(_last, *(tmp_first + i));
 						_last++;
 					}
-					_alloc.deallocate(tmp_last - tmp_size, tmp_max);
+					_alloc.deallocate(tmp_first, tmp_max);
 				}
 			}
 
@@ -238,7 +233,7 @@ namespace ft {
 				difference_type n = ft::distance(first, last);
 				if (n <= 0)
 					return ;
-				if (size() + n <= capacity())
+				if (size() + n <= _max)
 				{
 					for (size_type i = 0; i < n; i++)
 					{
@@ -248,9 +243,9 @@ namespace ft {
 				}
 				else
 				{
-					_alloc.deallocate(_first, capacity());
+					_alloc.deallocate(_first, _max);
 					_first = _alloc.allocate(n);
-					_max = _first + n;
+					_max = n;
 					_last = _first;
 					for (size_type i = 0; i < n; i++)
 					{
@@ -263,7 +258,7 @@ namespace ft {
 				clear();
 				if (n <= 0)
 					return ;
-				if (size() + n <= capacity())
+				if (size() + n <= _max)
 				{
 					for (size_type i = 0; i < n; i++)
 					{
@@ -273,9 +268,9 @@ namespace ft {
 				}
 				else
 				{
-					_alloc.deallocate(_first, capacity());
+					_alloc.deallocate(_first, _max);
 					_first = _alloc.allocate(n);
-					_max = _first + n;
+					_max = n;
 					_last = _first;
 					for (size_type i = 0; i < n; i++)
 					{
@@ -286,7 +281,7 @@ namespace ft {
 			}
 
 			void push_back(const value_type &val) {
-				if (size() == capacity())
+				if (size() == _max)
 				{
 					size_type new_max;
 					if (size() > 0)
@@ -295,7 +290,7 @@ namespace ft {
 						new_max = 1;
 					reserve(new_max);
 				}
-				_alloc.constrcut(_last, val);
+				_alloc.construct(_last, val);
 				_last++;
 			}
 
@@ -305,13 +300,25 @@ namespace ft {
 			}
 
 			iterator insert(iterator position, const value_type &val) {
+				if (size() == _max)
+					reserve(size() * 2);
+				pointer pos = &(*position);
+				pointer tmp_cur = _last;
+				if (_last == _first)
 
 			}
-			void insert(iterator  position, size_type n, const value_type &val) {
+			void insert(iterator position, size_type n, const value_type &val) {
 				if (n <= 0)
 					return;
 				if (n > max_size())
 					throw (std::length_error("vector::fill_insert"));
+				if ((size() + n) > _max)
+				{
+					if ((size() * 2) < (size() + n))
+						reserve(size() + n);
+					else
+						reserve(size() * 2);
+				}
 			}
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last) {
@@ -331,7 +338,7 @@ namespace ft {
 				allocator_type tmp_alloc = _alloc;
 				pointer tmp_first = _first;
 				pointer tmp_last = _last;
-				pointer tmp_max = _max;
+				size_type tmp_max = _max;
 
 				_alloc = x._alloc;
 				_first = x._first;
@@ -364,7 +371,7 @@ namespace ft {
 			allocator_type _alloc;
 			pointer _first;
 			pointer _last;
-			pointer _max;
+			size_type _max;
 	};
 
 	//relational operators
