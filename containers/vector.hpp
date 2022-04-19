@@ -304,8 +304,15 @@ namespace ft {
 					reserve(size() * 2);
 				pointer pos = &(*position);
 				pointer tmp_cur = _last;
-				if (_last == _first)
-
+				_last++;
+				while (tmp_cur != pos)
+				{
+					_alloc.construct(tmp_cur, *(tmp_cur - 1));
+					_alloc.destroy(tmp_cur - 1);
+					tmp_cur--;
+				}
+				_alloc.construct(tmp_cur, val);
+				return (iterator(tmp_cur));
 			}
 			void insert(iterator position, size_type n, const value_type &val) {
 				if (n <= 0)
@@ -319,10 +326,50 @@ namespace ft {
 					else
 						reserve(size() * 2);
 				}
+				pointer pos = &(*position);
+				pointer tmp = _last + (n - 1);
+				_last += n;
+				while (tmp != pos)
+				{
+					_alloc.construct(tmp, *(tmp_cur - n));
+					_alloc.destroy(tmp - n);
+					tmp--;
+				}
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(tmp, val);
+					tmp++;
+				}
 			}
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last) {
-
+				size_type n = last - first;
+				if (n <= 0)
+					return;
+				if (n > max_size())
+					throw (std::length_error("vector::fill_insert"));
+				if ((size() + n) > _max)
+				{
+					if ((size() * 2) < (size() + n))
+						reserve(size() + n);
+					else
+						reserve(size() * 2);
+				}
+				pointer pos = &(*position);
+				pointer tmp = _last + (n - 1);
+				_last += n;
+				while (tmp != pos)
+				{
+					_alloc.construct(tmp, *(tmp_cur - n));
+					_alloc.destroy(tmp - n);
+					tmp--;
+				}
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(tmp, *first);
+					first++;
+					tmp++;
+				}
 			}
 
 			iterator erase(iterator position) {
