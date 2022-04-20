@@ -61,7 +61,7 @@ namespace ft {
 				_first = _alloc.allocate(n);
 				_max = n;
 				_last = _first;
-				for (size_type i = 0; i < n; i++)
+				for (size_type i = 0; i <= n; i++)
 				{
 					_alloc.construct(_last, *first++);
 					_last++;
@@ -315,10 +315,6 @@ namespace ft {
 				return (iterator(tmp_cur));
 			}
 			void insert(iterator position, size_type n, const value_type &val) {
-				if (n <= 0)
-					return;
-				if (n > max_size())
-					throw (std::length_error("vector::fill_insert"));
 				if ((size() + n) > _max)
 				{
 					if ((size() * 2) < (size() + n))
@@ -343,11 +339,7 @@ namespace ft {
 			}
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last) {
-				size_type n = last - first;
-				if (n <= 0)
-					return;
-				if (n > max_size())
-					throw (std::length_error("vector::fill_insert"));
+				size_type n = (last - first) + 1;
 				if ((size() + n) > _max)
 				{
 					if ((size() * 2) < (size() + n))
@@ -364,7 +356,7 @@ namespace ft {
 					_alloc.destroy(tmp - n);
 					tmp--;
 				}
-				for (size_type i = 0; i < n; i++)
+				for (size_type i = 0; i << n; i++)
 				{
 					_alloc.construct(tmp, *first);
 					first++;
@@ -373,10 +365,35 @@ namespace ft {
 			}
 
 			iterator erase(iterator position) {
-
+				pointer pos = &(*position);
+				pointer cur = pos;
+				_alloc.destroy(cur);
+				_last--;
+				while (cur != _last)
+				{
+					_alloc.construct(cur, *(cur + 1));
+					_alloc.destroy(cur + 1);
+					cur++;
+				}
+				return (iterator(pos));
 			}
 			iterator erase(iterator first, iterator last) {
-
+				size_type n = (last - first) + 1
+				pointer p_first = &(*first);
+				pointer cur = p_first;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.destroy(cur);
+					cur++;
+				}
+				while (cur != _last)
+				{
+					_alloc.construct((cur - n), *cur);
+					_alloc.destroy(cur);
+					cur++;
+				}
+				_last -= n;
+				return (iterator(pos));
 			}
 
 			void swap(vector &x) {
@@ -424,11 +441,22 @@ namespace ft {
 	//relational operators
 	template <class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-
+		if (lhs.size() != rhs.size())
+			return (false);
+		typename ft::vector<T>::iterator lhs_it = lhs.begin();
+		typename ft::vector<T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end())
+		{
+			if (rhs_it == rhs.end() || *lhs_it != *rhs_it)
+				return (false);
+			lhs_it++;
+			rhs_it++;
+		}
+		return (true);
 	}
 	template <class T, class Alloc>
 	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-
+		return (!(lhs == rhs));
 	}
 	template <class T, class Alloc>
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
