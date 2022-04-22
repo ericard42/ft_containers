@@ -57,7 +57,7 @@ namespace ft {
 				   														_first(0),
 																		_last(0),
 																		_max(0) {
-				size_type n = last - first;
+				size_type n = ft::distance(first, last);
 				_first = _alloc.allocate(n);
 				_max = n;
 				_last = _first;
@@ -339,7 +339,7 @@ namespace ft {
 			}
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last) {
-				size_type n = (last - first) + 1;
+				size_type n = ft::distance(first,  last);
 				if ((size() + n) > _max)
 				{
 					if ((size() * 2) < (size() + n))
@@ -378,7 +378,7 @@ namespace ft {
 				return (iterator(pos));
 			}
 			iterator erase(iterator first, iterator last) {
-				size_type n = (last - first) + 1
+				size_type n = ft::distance(first, last)
 				pointer p_first = &(*first);
 				pointer cur = p_first;
 				for (size_type i = 0; i < n; i++)
