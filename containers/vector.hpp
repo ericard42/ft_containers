@@ -5,6 +5,7 @@
 #include "../iterators/iterator_traits.hpp"
 #include "../iterators/random_iterator.hpp"
 #include "../utils/utils.hpp"
+#include "../utils/type_traits.hpp"
 #include <memory>
 #include <string>
 #include <iostream>
@@ -52,7 +53,7 @@ namespace ft {
 			}
 			//range constructor
 			template <class InputIterator>
-			vector(InputIterator first, InputIterator last,
+			vector(typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last,
 				   const allocator_type &alloc = allocator_type()) : _alloc(alloc),
 				   														_first(0),
 																		_last(0),
@@ -228,7 +229,7 @@ namespace ft {
 
 			//Modifiers
 			template <class InputIterator>
-			void assign(InputIterator first, InputIterator last) {
+			void assign(typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				clear();
 				difference_type n = ft::distance(first, last);
 				if (n <= 0)
@@ -327,7 +328,7 @@ namespace ft {
 				_last += n;
 				while (tmp != pos)
 				{
-					_alloc.construct(tmp, *(tmp_cur - n));
+					_alloc.construct(tmp, *(tmp - n));
 					_alloc.destroy(tmp - n);
 					tmp--;
 				}
@@ -338,7 +339,7 @@ namespace ft {
 				}
 			}
 			template <class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last) {
+			void insert(iterator position, typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				size_type n = ft::distance(first,  last);
 				if ((size() + n) > _max)
 				{
@@ -352,7 +353,7 @@ namespace ft {
 				_last += n;
 				while (tmp != pos)
 				{
-					_alloc.construct(tmp, *(tmp_cur - n));
+					_alloc.construct(tmp, *(tmp - n));
 					_alloc.destroy(tmp - n);
 					tmp--;
 				}
@@ -378,7 +379,7 @@ namespace ft {
 				return (iterator(pos));
 			}
 			iterator erase(iterator first, iterator last) {
-				size_type n = ft::distance(first, last)
+				size_type n = ft::distance(first, last);
 				pointer p_first = &(*first);
 				pointer cur = p_first;
 				for (size_type i = 0; i < n; i++)
@@ -393,7 +394,7 @@ namespace ft {
 					cur++;
 				}
 				_last -= n;
-				return (iterator(pos));
+				return (iterator(p_first));
 			}
 
 			void swap(vector &x) {
@@ -460,19 +461,19 @@ namespace ft {
 	}
 	template <class T, class Alloc>
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-
+		return(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
 	template <class T, class Alloc>
 	bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-
+		return (!(rhs < lhs));
 	}
 	template <class T, class Alloc>
 	bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-
+		return (rhs < lhs);
 	}
 	template <class T, class Alloc>
 	bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-
+		return (!(lhs < rhs));
 	}
 
 	//Swap

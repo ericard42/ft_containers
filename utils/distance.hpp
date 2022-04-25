@@ -7,7 +7,7 @@ namespace ft {
 
 	template <typename InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type
-	do_distance(InputIterator first, InputIterator last, std:std::input_iterator_tag)
+	do_distance(InputIterator first, InputIterator last, std::input_iterator_tag)
 	{
 		typename ft::iterator_traits<InputIterator>::difference_type ret;
 		for (ret = 0; first != last; first++)
@@ -19,7 +19,7 @@ namespace ft {
 	typename ft::iterator_traits<InputIterator>::difference_type
 	do_distance(InputIterator first, InputIterator last, std::random_access_iterator_tag)
 	{
-		return (last - first)
+		return (last - first);
 	}
 
 	template <typename InputIterator>
