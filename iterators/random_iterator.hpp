@@ -86,6 +86,10 @@ namespace ft {
 				return (*this);
 			}
 
+			operator random_iterator<const T> const() {
+				return (random_iterator<const T>(_p));
+			}
+
 		protected :
 			pointer _p;
 	};
@@ -114,7 +118,7 @@ namespace ft {
 		return (lhs.base() == rhs.base());
 	}
 	//a == const b
-	/*template <class T>
+	template <class T>
 	bool operator==(const ft::random_iterator<T> &lhs,
 					const ft::random_iterator<const T> &rhs) {
 		return (lhs.base() == rhs.base());
@@ -122,9 +126,9 @@ namespace ft {
 	//const a == b
 	template <class T>
 	bool operator==(const ft::random_iterator<const T> &lhs,
-					const ft::random_iterator<T> &rhs {
+					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() == rhs.base());
-	}*/
+	}
 	//a != b
 	template <class T>
 	bool operator!=(const ft::random_iterator<T> &lhs,

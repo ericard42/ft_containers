@@ -69,7 +69,7 @@ namespace ft {
 				}
 			}
 			//copy constructor
-			vector(const vector &x) : _alloc(x.alloc),
+			vector(const vector &x) : _alloc(x._alloc),
 										_first(0),
 										_last(0),
 										_max(0) {
@@ -92,17 +92,17 @@ namespace ft {
 
 			//Iterators
 			iterator begin() {
-				return (_first);
+				return (iterator(_first));
 			}
 			const_iterator begin() const {
-				return (_first);
+				return (const_iterator(_first));
 			}
 
 			iterator end() {
-				return (_last);
+				return (iterator(_last));
 			}
 			const_iterator end() const {
-				return (_last);
+				return (const_iterator(_last));
 			}
 
 			reverse_iterator rbegin() {
@@ -231,7 +231,7 @@ namespace ft {
 			template <class InputIterator>
 			void assign(typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				clear();
-				difference_type n = ft::distance(first, last);
+				size_type n = ft::distance(first, last);
 				if (n <= 0)
 					return ;
 				if (size() + n <= _max)
@@ -284,12 +284,10 @@ namespace ft {
 			void push_back(const value_type &val) {
 				if (size() == _max)
 				{
-					size_type new_max;
 					if (size() > 0)
-						new_max = (size() * 2);
+						reserve(size() * 2);
 					else
-						new_max = 1;
-					reserve(new_max);
+						reserve(1);
 				}
 				_alloc.construct(_last, val);
 				_last++;
@@ -301,9 +299,18 @@ namespace ft {
 			}
 
 			iterator insert(iterator position, const value_type &val) {
-				if (size() == _max)
-					reserve(size() * 2);
 				pointer pos = &(*position);
+				if (size() == _max)
+				{
+					size_t i = 0;
+					for (pointer tmp_first = _first; tmp_first != pos; tmp_first++)
+						i++;
+					if (_max > 0)
+						reserve(size() * 2);
+					else
+						reserve(1);
+					pos = _first + i;
+				}
 				pointer tmp_cur = _last;
 				_last++;
 				while (tmp_cur != pos)
@@ -316,14 +323,18 @@ namespace ft {
 				return (iterator(tmp_cur));
 			}
 			void insert(iterator position, size_type n, const value_type &val) {
+				pointer pos = &(*position);
 				if ((size() + n) > _max)
 				{
+					size_t i = 0;
+					for (pointer tmp_first = _first; tmp_first != pos; tmp_first++)
+						i++;
 					if ((size() * 2) < (size() + n))
 						reserve(size() + n);
 					else
 						reserve(size() * 2);
+					pos = _first + i;
 				}
-				pointer pos = &(*position);
 				pointer tmp = _last + (n - 1);
 				_last += n;
 				while (tmp != pos)
@@ -341,14 +352,18 @@ namespace ft {
 			template <class InputIterator>
 			void insert(iterator position, typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				size_type n = ft::distance(first,  last);
+				pointer pos = &(*position);
 				if ((size() + n) > _max)
 				{
+					size_t i = 0;
+					for (pointer tmp_first = _first; tmp_first != pos; tmp_first++)
+						i++;
 					if ((size() * 2) < (size() + n))
 						reserve(size() + n);
 					else
 						reserve(size() * 2);
+					pos = _first + i;
 				}
-				pointer pos = &(*position);
 				pointer tmp = _last + (n - 1);
 				_last += n;
 				while (tmp != pos)
@@ -444,8 +459,8 @@ namespace ft {
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
 		if (lhs.size() != rhs.size())
 			return (false);
-		typename ft::vector<T>::iterator lhs_it = lhs.begin();
-		typename ft::vector<T>::iterator rhs_it = rhs.begin();
+		typename ft::vector<T>::const_iterator lhs_it = lhs.begin();
+		typename ft::vector<T>::const_iterator rhs_it = rhs.begin();
 		while (lhs_it != lhs.end())
 		{
 			if (rhs_it == rhs.end() || *lhs_it != *rhs_it)
