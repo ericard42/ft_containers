@@ -26,10 +26,6 @@ namespace ft {
 	template <>
 	struct is_integral<char>: is_integral_type<true, char>{};
 	template <>
-	struct is_integral<char16_t>: is_integral_type<true, char16_t>{};
-	template <>
-	struct is_integral<char32_t>: is_integral_type<true, char32_t>{};
-	template <>
 	struct is_integral<wchar_t>: is_integral_type<true, wchar_t>{};
 	template <>
 	struct is_integral<signed char>: is_integral_type<true, signed char>{};

@@ -62,7 +62,7 @@ namespace ft {
 				_first = _alloc.allocate(n);
 				_max = n;
 				_last = _first;
-				for (size_type i = 0; i <= n; i++)
+				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.construct(_last, *first++);
 					_last++;
@@ -73,7 +73,7 @@ namespace ft {
 										_first(0),
 										_last(0),
 										_max(0) {
-				insert(begin(), x.begin(), x.end());
+				*this = x;
 			}
 			//destructor
 			~vector() {
@@ -86,7 +86,16 @@ namespace ft {
 				if (x == *this)
 					return (*this);
 				clear();
-				insert(begin(), x.begin(), x.end());
+				pointer xfirst = x._first;
+				size_type n = ft::distance(x.begin(), x.end());
+				_first = _alloc.allocate(n);
+				_max = n;
+				_last = _first;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(_last, *xfirst++);
+					_last++;
+				}
 				return (*this);
 			}
 
@@ -187,27 +196,13 @@ namespace ft {
 
 			reference at(size_type n) {
 				if (n >= size())
-				{
-					std::ostringstream oss;
-					oss << n;
-					std::string s_n = oss.str();
-					oss << size();
-					std::string s_size = oss.str();
-					throw ("vector::range_check: n (which is " + s_n + ") >= this->size() (which is " + s_size + ")");
-				}
+					throw std::out_of_range("");
 				else
 					return ((*this)[n]);
 			}
 			const_reference at(size_type n) const {
 				if (n >= size())
-				{
-					std::ostringstream oss;
-					oss << n;
-					std::string s_n = oss.str();
-					oss << size();
-					std::string s_size = oss.str();
-					throw ("vector::range_check: n (which is " + s_n + ") >= this->size() (which is " + s_size + ")");
-				}
+					throw std::out_of_range("");
 				else
 					return ((*this)[n]);
 			}
@@ -372,7 +367,7 @@ namespace ft {
 					_alloc.destroy(tmp - n);
 					tmp--;
 				}
-				for (size_type i = 0; i << n; i++)
+				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.construct(tmp, *first);
 					first++;

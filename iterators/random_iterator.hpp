@@ -66,7 +66,7 @@ namespace ft {
 				return (*this);
 			}
 			//a - n
-			random_iterator operator-(difference_type n) {
+			random_iterator operator-(difference_type n) const {
 				return (random_iterator(_p - n));
 			}
 			//a--
@@ -109,6 +109,20 @@ namespace ft {
 							const ft::random_iterator<T> &rhs) {
 			return (lhs.base() - rhs.base());
 	}
+	//a - const b
+	template <class T>
+	typename ft::random_iterator<T>::difference_type operator-(
+			const ft::random_iterator<T> &lhs,
+			const ft::random_iterator<const T> &rhs) {
+		return (lhs.base() - rhs.base());
+	}
+	//const a - b
+	template <class T>
+	typename ft::random_iterator<T>::difference_type operator-(
+			const ft::random_iterator<const T> &lhs,
+			const ft::random_iterator<T> &rhs) {
+		return (lhs.base() - rhs.base());
+	}
 
 	//Relational Operators
 	//a == b
@@ -129,33 +143,98 @@ namespace ft {
 					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() == rhs.base());
 	}
+
 	//a != b
 	template <class T>
 	bool operator!=(const ft::random_iterator<T> &lhs,
 					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() != rhs.base());
 	}
+	//a != const b
+	template <class T>
+	bool operator!=(const ft::random_iterator<T> &lhs,
+					const ft::random_iterator<const T> &rhs) {
+		return (lhs.base() != rhs.base());
+	}
+	//const a != b
+	template <class T>
+	bool operator!=(const ft::random_iterator<const T> &lhs,
+					const ft::random_iterator<T> &rhs) {
+		return (lhs.base() != rhs.base());
+	}
+
 	//a < b
 	template <class T>
 	bool operator<(const ft::random_iterator<T> &lhs,
 					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() < rhs.base());
 	}
+	//a < const b
+	template <class T>
+	bool operator<(const ft::random_iterator<T> &lhs,
+				   const ft::random_iterator<const T> &rhs) {
+		return (lhs.base() < rhs.base());
+	}
+	//const a < b
+	template <class T>
+	bool operator<(const ft::random_iterator<const T> &lhs,
+				   const ft::random_iterator<T> &rhs) {
+		return (lhs.base() < rhs.base());
+	}
+
 	//a <= b
 	template <class T>
 	bool operator<=(const ft::random_iterator<T> &lhs,
 					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() <= rhs.base());
 	}
+	//a <= const b
+	template <class T>
+	bool operator<=(const ft::random_iterator<T> &lhs,
+					const ft::random_iterator<const T> &rhs) {
+		return (lhs.base() <= rhs.base());
+	}
+	//const a <= b
+	template <class T>
+	bool operator<=(const ft::random_iterator<const T> &lhs,
+					const ft::random_iterator<T> &rhs) {
+		return (lhs.base() <= rhs.base());
+	}
+
 	//a > b
 	template <class T>
 	bool operator>(const ft::random_iterator<T> &lhs,
 					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() > rhs.base());
 	}
+	//a > const b
+	template <class T>
+	bool operator>(const ft::random_iterator<T> &lhs,
+				   const ft::random_iterator<const T> &rhs) {
+		return (lhs.base() > rhs.base());
+	}
+	//const a > b
+	template <class T>
+	bool operator>(const ft::random_iterator<const T> &lhs,
+				   const ft::random_iterator<T> &rhs) {
+		return (lhs.base() > rhs.base());
+	}
+
 	//a >= b
 	template <class T>
 	bool operator>=(const ft::random_iterator<T> &lhs,
+					const ft::random_iterator<T> &rhs) {
+		return (lhs.base() >= rhs.base());
+	}
+	//a >= const b
+	template <class T>
+	bool operator>=(const ft::random_iterator<T> &lhs,
+					const ft::random_iterator<const T> &rhs) {
+		return (lhs.base() >= rhs.base());
+	}
+	//const a >= b
+	template <class T>
+	bool operator>=(const ft::random_iterator<const T> &lhs,
 					const ft::random_iterator<T> &rhs) {
 		return (lhs.base() >= rhs.base());
 	}
