@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include <memory>
+#include <functional>
 #include "../utils/pair.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include "../iterators/map_iterator.hpp"
