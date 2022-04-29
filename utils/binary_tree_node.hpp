@@ -26,7 +26,7 @@ namespace ft {
 				_left = src._left;
 				return *this;
 			}
-			~treeNode() {};
+			~treeNode() {}; //Faire Destructeur, maybe pour ca les soucis de leaks avec destroy ?
 
 			void setParent(const pointer parent) {
 				_parent = parent;
