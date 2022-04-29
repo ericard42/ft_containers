@@ -24,7 +24,7 @@ namespace ft {
 				_right = src._right;
 				_left = src._left;
 			}
-			~treeNode();
+			~treeNode() {};
 
 			void setParent(const pointer parent) {
 				_parent = parent;

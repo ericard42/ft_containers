@@ -1,15 +1,12 @@
 #include <iostream>
 #include "containers/vector.hpp"
 #include "containers/stack.hpp"
+#include "utils/binary_tree.hpp"
 #include <vector>
 
 int main() {
+	Tree<int, int> test();
+	ft::pair<int, int> pair(2, 4);
 
-	ft::stack<int> prout;
-
-	prout.push(4);
-	prout.push(42);
-	std::cout << prout.top() << std::endl;
-	prout.pop();
-	std::cout << prout.top() << std::endl;
+	test.add(pair);
 }
