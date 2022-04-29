@@ -26,10 +26,28 @@ namespace ft {
 				_comp = src._comp;
 				_alloc = src._alloc;
 				_origin = src._origin;
+				return *this;
 			}
 			//Supprimer l'arbre correctement
 			~Tree() {
+				node_ptr cur = _origin;
+				node_ptr tmp = prev(cur);
+				while (tmp != NULL)
+				{
+					cur = tmp;
+					tmp = prev(cur);
 
+				}
+				tmp = next(cur);
+				while (tmp != NULL)
+				{
+					_alloc.destroy(cur);
+					//_alloc.deallocate(cur, 1);
+					cur = tmp;
+					tmp = next(cur);
+				}
+				_alloc.destroy(cur);
+				//_alloc.deallocate(cur, 1);
 			}
 
 			node_ptr add(const value_type &pair) {
@@ -44,16 +62,18 @@ namespace ft {
 				while (cur != NULL)
 				{
 					cur_prev = cur;
-					if (_comp(pair.first, cur->getKey()))
+					if (_comp(pair.first, cur->getKey())) {
 						cur = cur->getLeft();
-					else if (_comp(cur->getKey(), pair.first))
+					}
+					else if (_comp(cur->getKey(), pair.first)) {
 						cur = cur->getRight();
+					}
 					else
 						return (cur);
 				}
 				cur = _alloc.allocate(1);
 				_alloc.construct(cur, node(pair, cur_prev));
-				if (_comp(pair.first, cur->getKey()))
+				if (_comp(pair.first, cur_prev->getKey()))
 					cur_prev->setLeft(cur);
 				else
 					cur_prev->setRight(cur);
@@ -114,7 +134,7 @@ namespace ft {
 				return (NULL);
 			}
 
-			void del_noChild(node_ptr n_del) {
+			void del_noChild(node_ptr &n_del) {
 				if (n_del == _origin)
 					_origin = NULL;
 				else
@@ -125,9 +145,10 @@ namespace ft {
 						n_del->getParent()->setRight(NULL);
 				}
 				_alloc.destroy(n_del);
+				n_del = NULL;
 			}
 
-			void del_oneChild(node_ptr n_del) {
+			void del_oneChild(node_ptr &n_del) {
 				node_ptr n_new;
 				node_ptr delParent;
 
@@ -150,9 +171,10 @@ namespace ft {
 					n_new->setParent(delParent);
 				}
 				_alloc.destroy(n_del);
+				n_del = NULL;
 			}
 
-			void del_twoChild(node_ptr n_del) {
+			void del_twoChild(node_ptr &n_del) {
 				node_ptr n_new = next(n_del);
 				node_ptr delParent;
 				node_ptr delLeft = n_del->getLeft();
@@ -166,14 +188,21 @@ namespace ft {
 				}
 				else
 				{
+					if ((n_new->getParent()->getLeft()) && (n_new->getParent()->getLeft() == n_new))
+					{
+						if (n_new->getRight() != NULL)
+						{
+							n_new->getRight()->setParent(n_new->getParent());
+							n_new->getParent()->setLeft(n_new->getRight());
+						}
+						else
+							n_new->getParent()->setLeft(NULL);
+					}
+
 					n_new->setLeft(delLeft);
 					delLeft->setParent(n_new);
 					n_new->setRight(delRight);
 					delRight->setParent(n_new);
-					if ((n_new->getParent()->getLeft()) && (n_new->getParent()->getLeft() == n_new))
-						n_new->getParent()->getLeft() = NULL;
-					else
-						n_new->getParent()->getRight() = NULL;
 				}
 				if (n_del == _origin)
 				{
@@ -190,9 +219,10 @@ namespace ft {
 					n_new->setParent(delParent);
 				}
 				_alloc.destroy(n_del);
+				n_del = NULL;
 			}
 
-			void del(node_ptr n_del) {
+			void del(node_ptr &n_del) {
 				if (!n_del)
 					return ;
 				if (n_del->getLeft() == NULL && n_del->getRight() == NULL)
@@ -208,6 +238,7 @@ namespace ft {
 			Compare			_comp;
 			allocator_type	_alloc;
 	};
+
 
 }
 

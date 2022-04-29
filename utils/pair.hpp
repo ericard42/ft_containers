@@ -18,10 +18,11 @@ namespace ft {
 		}
 
 		//Operator=
-		pair &operator=(const pair &other) {
+		/*pair &operator=(const pair &other) {
 			first = other.first;
 			second = other.second;
-		}
+			return (*this);
+		}*/
 
 		//Member objects
 		first_type first;

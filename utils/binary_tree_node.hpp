@@ -2,6 +2,7 @@
 #define BINARY_TREE_NODE_HPP
 
 #include "pair.hpp"
+#include <iostream>
 
 namespace ft {
 
@@ -23,6 +24,7 @@ namespace ft {
 				_parent = src._parent;
 				_right = src._right;
 				_left = src._left;
+				return *this;
 			}
 			~treeNode() {};
 
@@ -73,6 +75,18 @@ namespace ft {
 			}
 			const value_type &getPair() const {
 				return (_data);
+			}
+
+			void printNode() {
+				std::cout << "Key : " << getKey() << "\n";
+				//std::cout << "Value : " << getValue() << "\n";
+				if (getParent() != NULL)
+					std::cout << "Key Parent : " << getParent()->getKey() << "\n";
+				if (getLeft() != NULL)
+					std::cout << "Key Left : " << getLeft()->getKey() << "\n";
+				if (getRight() != NULL)
+					std::cout << "Key Right : " << getRight()->getKey() << "\n";
+				std::cout << "--------------------" << std::endl;
 			}
 
 		private :
