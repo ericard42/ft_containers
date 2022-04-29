@@ -188,6 +188,7 @@ namespace ft {
 				}
 				else
 				{
+					//Possiblement retirer ce if, parce que forcement a gauche du parent si je suis dans le else
 					if ((n_new->getParent()->getLeft()) && (n_new->getParent()->getLeft() == n_new))
 					{
 						if (n_new->getRight() != NULL)

@@ -43,7 +43,7 @@ int main() {
 	tree_node *n2 = test.search(5);
 	tree_node *n3 = test.search(9);
 	tree_node *n4 = test.search(42);*/
-	test.del(n2);
+	test.del(n1);
 
 	if (n1 != NULL)
 		n1->printNode();
