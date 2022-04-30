@@ -12,14 +12,15 @@ namespace ft {
 		public :
 			typedef treeNode* pointer;
 			typedef const treeNode* const_pointer;
+			typedef treeNode& reference;
 			typedef ft::pair<Key, Value> value_type;
 
 			treeNode() : _data(value_type()), _parent(NULL), _right(NULL), _left(NULL) {}
-			treeNode(value_type const &pair, const pointer parent = pointer()) : _data(pair), _parent(parent), _right(NULL), _left(NULL) {}
-			treeNode(treeNode const &src) {
+			treeNode(const value_type &pair, const pointer parent = pointer()) : _data(pair), _parent(parent), _right(NULL), _left(NULL) {}
+			treeNode(const treeNode &src) {
 				*this = src;
 			}
-			treeNode &operator=(treeNode const &src) {
+			treeNode &operator=(const treeNode &src) {
 				_data = src._data;
 				_parent = src._parent;
 				_right = src._right;
@@ -96,6 +97,18 @@ namespace ft {
 			pointer _left;
 
 	};
+
+	template <class Key, class Value>
+	bool operator==(const ft::treeNode<Key, Value> &lhs,
+					const ft::treeNode<Key, Value> &rhs) {
+		return ((lhs.getKey() == rhs.getKey()) && (lhs.getValue() == rhs.getValue()));
+	}
+
+	template <class Key, class Value>
+	bool operator!=(const ft::treeNode<Key, Value> &lhs,
+					const ft::treeNode<Key, Value> &rhs) {
+		return (!(lhs == rhs));
+	}
 
 }
 

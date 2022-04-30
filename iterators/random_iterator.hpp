@@ -14,7 +14,7 @@ namespace ft {
 			typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type difference_type;
 
 			random_iterator() : _p(pointer()) {} //Default Constructor
-			random_iterator(pointer p) : _p(p) {};
+			random_iterator(pointer p) : _p(p) {}
 			random_iterator(const random_iterator &src) : _p(src._p) {} //Copy Constructor
 			~random_iterator() {} // Destructor
 
@@ -90,7 +90,7 @@ namespace ft {
 				return (random_iterator<const T>(_p));
 			}
 
-		protected :
+		private :
 			pointer _p;
 	};
 

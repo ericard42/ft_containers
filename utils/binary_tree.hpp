@@ -5,17 +5,20 @@
 #include <memory>
 #include "binary_tree_node.hpp"
 #include "pair.hpp"
+#include "../iterators/map_iterator.hpp"
 
 namespace ft {
 
 	template <class Key, class Value, class Compare = std::less<Key> >
 	class Tree {
 		public:
-			typedef treeNode<Key, Value> node;
-			typedef node* node_ptr;
-			typedef const node* const_node_ptr;
-			typedef ft::pair<Key, Value> value_type;
-			typedef std::allocator<node> allocator_type;
+			typedef treeNode<Key, Value>						node;
+			typedef node*										node_ptr;
+			typedef const node*									const_node_ptr;
+			typedef ft::pair<Key, Value>						value_type;
+			typedef std::allocator<node>						allocator_type;
+			typedef ft::map_iterator<node, Key, Value>			iterator;
+			typedef ft::const_map_iterator<node, Key, Value>	const_iterator;
 
 			Tree() : _origin(node_ptr()), _comp(Compare()), _alloc(allocator_type()) {}
 			Tree(const Tree &src) {
@@ -232,6 +235,24 @@ namespace ft {
 					del_oneChild(n_del);
 				else
 					del_twoChild(n_del);
+			}
+
+			node_ptr getOrigin() {
+				return (_origin);
+			}
+
+			node_ptr getBegin() {
+				node_ptr cur = _origin;
+				while (prev(cur) != NULL)
+					cur = prev(cur);
+				return (cur);
+			}
+
+			node_ptr getEnd() {
+				node_ptr cur = _origin;
+				while(next(cur) != NULL)
+					cur = next(cur);
+				return (cur);
 			}
 
 		private :

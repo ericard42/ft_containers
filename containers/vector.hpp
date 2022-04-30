@@ -53,7 +53,7 @@ namespace ft {
 			}
 			//range constructor
 			template <class InputIterator>
-			vector(typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last,
+			vector(typename ft::enable_if<!(ft::is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last,
 				   const allocator_type &alloc = allocator_type()) : _alloc(alloc),
 				   														_first(0),
 																		_last(0),
@@ -224,7 +224,7 @@ namespace ft {
 
 			//Modifiers
 			template <class InputIterator>
-			void assign(typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
+			void assign(typename ft::enable_if<!(ft::is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				clear();
 				size_type n = ft::distance(first, last);
 				if (n <= 0)
@@ -345,7 +345,7 @@ namespace ft {
 				}
 			}
 			template <class InputIterator>
-			void insert(iterator position, typename enable_if<!(is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
+			void insert(iterator position, typename ft::enable_if<!(ft::is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				size_type n = ft::distance(first,  last);
 				pointer pos = &(*position);
 				if ((size() + n) > _max)
@@ -471,7 +471,7 @@ namespace ft {
 	}
 	template <class T, class Alloc>
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-		return(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+		return(ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
 	template <class T, class Alloc>
 	bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
