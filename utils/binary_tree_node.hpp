@@ -10,10 +10,12 @@ namespace ft {
 	class treeNode {
 
 		public :
-			typedef treeNode* pointer;
-			typedef const treeNode* const_pointer;
-			typedef treeNode& reference;
-			typedef ft::pair<Key, Value> value_type;
+			typedef treeNode* 				pointer;
+			typedef const treeNode*			const_pointer;
+			typedef treeNode&				reference;
+			typedef ft::pair<Key, Value>	value_type;
+			typedef Key						key_value;
+			typedef Value					value_value;
 
 			treeNode() : _data(value_type()), _parent(NULL), _right(NULL), _left(NULL) {}
 			treeNode(const value_type &pair, const pointer parent = pointer()) : _data(pair), _parent(parent), _right(NULL), _left(NULL) {}
@@ -21,13 +23,14 @@ namespace ft {
 				*this = src;
 			}
 			treeNode &operator=(const treeNode &src) {
+				//TODO Deep Copy
 				_data = src._data;
 				_parent = src._parent;
 				_right = src._right;
 				_left = src._left;
 				return *this;
 			}
-			~treeNode() {}; //Faire Destructeur, maybe pour ca les soucis de leaks avec destroy ?
+			~treeNode() {}; //TODO Faire Destructeur, maybe pour ca les soucis de leaks avec destroy ?
 
 			void setParent(const pointer parent) {
 				_parent = parent;

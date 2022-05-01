@@ -21,7 +21,7 @@ namespace ft {
 
 			//Constructors
 			map_iterator() : _tree(Tree()), _cur(node_ptr()) {}
-			map_iterator(Tree tree, node_ptr cur) : _tree(tree), _cur(cur) {}
+			map_iterator(Tree tree, pointer cur) : _tree(tree), _cur(cur) {}
 			map_iterator(const map_iterator &src) {
 				_tree = src._tree;
 				_cur = src._cur;
@@ -35,6 +35,10 @@ namespace ft {
 				_tree = src._tree;
 				_cur = src._cur;
 				return (*this);
+			}
+
+			pointer base() const {
+				return (_cur);
 			}
 
 			//Operator*
@@ -83,7 +87,7 @@ namespace ft {
 			pointer		_cur;
 	};
 
-	template <class T, class Key, class Value>
+	template <class T>
 	class const_map_iterator : public ft::iterator<std::bidirectional_iterator_tag, T> {
 		public :
 			//T = Node
@@ -96,7 +100,7 @@ namespace ft {
 
 			//Constructors
 			const_map_iterator() : _tree(Tree()), _cur(node_ptr()) {}
-			const_map_iterator(Tree tree, node_ptr cur) : _tree(tree), _cur(cur) {}
+			const_map_iterator(Tree tree, pointer cur) : _tree(tree), _cur(cur) {}
 			const_map_iterator(const const_map_iterator &src) {
 				_tree = src._tree;
 				_cur = src._cur;

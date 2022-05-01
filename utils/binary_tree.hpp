@@ -15,23 +15,26 @@ namespace ft {
 			typedef treeNode<Key, Value>						node;
 			typedef node*										node_ptr;
 			typedef const node*									const_node_ptr;
+			typedef size_t 										size_type;
 			typedef ft::pair<Key, Value>						value_type;
 			typedef std::allocator<node>						allocator_type;
 			typedef ft::map_iterator<node, Key, Value>			iterator;
 			typedef ft::const_map_iterator<node, Key, Value>	const_iterator;
 
-			Tree() : _origin(node_ptr()), _comp(Compare()), _alloc(allocator_type()) {}
+			Tree() : _origin(node_ptr()), _overf(node_ptr()), _size(0), _comp(Compare()), _alloc(allocator_type()) {}
 			Tree(const Tree &src) {
 				*this = src;
 			}
-			//Faire Deep Copy
+			//TODO Faire Deep Copy
 			Tree &operator=(const Tree &src) {
 				_comp = src._comp;
 				_alloc = src._alloc;
 				_origin = src._origin;
+				_overf = src._end;
+				_size = src._size;
 				return *this;
 			}
-			//Supprimer l'arbre correctement
+			//TODO Supprimer l'arbre correctement
 			~Tree() {
 				node_ptr cur = _origin;
 				node_ptr tmp = prev(cur);
@@ -58,6 +61,7 @@ namespace ft {
 				{
 					_origin = _alloc.allocate(1);
 					_alloc.construct(_origin, node(pair));
+					_size++;
 					return (_origin);
 				}
 				node_ptr cur = _origin;
@@ -80,6 +84,7 @@ namespace ft {
 					cur_prev->setLeft(cur);
 				else
 					cur_prev->setRight(cur);
+				_size++;
 				return (cur);
 			}
 
@@ -110,12 +115,12 @@ namespace ft {
 					return (cur);
 				}
 				if (cur == _origin)
-					return (NULL);
+					return (_overf);
 				while ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() != cur))
 					cur = cur->getParent();
 				if ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() == cur))
 					return (cur->getParent());
-				return (NULL);
+				return (_overf);
 			}
 
 			node_ptr prev(node_ptr cur) {
@@ -129,12 +134,12 @@ namespace ft {
 					return (cur);
 				}
 				if (cur == _origin)
-					return (NULL);
+					return (_overf);
 				while ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() != cur))
 					cur = cur->getParent();
 				if ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() == cur))
 					return (cur->getParent());
-				return (NULL);
+				return (_overf);
 			}
 
 			void del_noChild(node_ptr &n_del) {
@@ -149,6 +154,7 @@ namespace ft {
 				}
 				_alloc.destroy(n_del);
 				n_del = NULL;
+				_size--;
 			}
 
 			void del_oneChild(node_ptr &n_del) {
@@ -175,6 +181,7 @@ namespace ft {
 				}
 				_alloc.destroy(n_del);
 				n_del = NULL;
+				_size--;
 			}
 
 			void del_twoChild(node_ptr &n_del) {
@@ -224,10 +231,13 @@ namespace ft {
 				}
 				_alloc.destroy(n_del);
 				n_del = NULL;
+				_size--;
 			}
 
 			void del(node_ptr &n_del) {
 				if (!n_del)
+					return ;
+				if (search(n_del->getKey()) == NULL)
 					return ;
 				if (n_del->getLeft() == NULL && n_del->getRight() == NULL)
 					del_noChild(n_del);
@@ -243,20 +253,26 @@ namespace ft {
 
 			node_ptr getBegin() {
 				node_ptr cur = _origin;
-				while (prev(cur) != NULL)
+				while (prev(cur) != _overf)
 					cur = prev(cur);
 				return (cur);
 			}
 
 			node_ptr getEnd() {
 				node_ptr cur = _origin;
-				while(next(cur) != NULL)
+				while(next(cur) != _overf)
 					cur = next(cur);
 				return (cur);
 			}
 
+			size_type getSize() {
+				return (_size);
+			}
+
 		private :
 			node_ptr		_origin;
+			node_ptr 		_overf;
+			size_type		_size;
 			Compare			_comp;
 			allocator_type	_alloc;
 	};

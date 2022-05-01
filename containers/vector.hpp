@@ -6,6 +6,7 @@
 #include "../iterators/random_iterator.hpp"
 #include "../utils/utils.hpp"
 #include "../utils/type_traits.hpp"
+#include "../utils/equal.hpp"
 #include <memory>
 #include <string>
 #include <iostream>
@@ -442,7 +443,7 @@ namespace ft {
 				return (_alloc);
 			}
 
-		private :
+		protected :
 			allocator_type _alloc;
 			pointer _first;
 			pointer _last;
@@ -452,7 +453,8 @@ namespace ft {
 	//relational operators
 	template <class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
-		if (lhs.size() != rhs.size())
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		/*if (lhs.size() != rhs.size())
 			return (false);
 		typename ft::vector<T>::const_iterator lhs_it = lhs.begin();
 		typename ft::vector<T>::const_iterator rhs_it = rhs.begin();
@@ -463,7 +465,7 @@ namespace ft {
 			lhs_it++;
 			rhs_it++;
 		}
-		return (true);
+		return (true);*/
 	}
 	template <class T, class Alloc>
 	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
