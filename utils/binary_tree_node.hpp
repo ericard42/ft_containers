@@ -23,14 +23,13 @@ namespace ft {
 				*this = src;
 			}
 			treeNode &operator=(const treeNode &src) {
-				//TODO Deep Copy
 				_data = src._data;
 				_parent = src._parent;
 				_right = src._right;
 				_left = src._left;
 				return *this;
 			}
-			~treeNode() {}; //TODO Faire Destructeur, maybe pour ca les soucis de leaks avec destroy ?
+			~treeNode() {};
 
 			void setParent(const pointer parent) {
 				_parent = parent;
@@ -83,13 +82,13 @@ namespace ft {
 
 			void printNode() {
 				std::cout << "Key : " << getKey() << "\n";
-				//std::cout << "Value : " << getValue() << "\n";
-				if (getParent() != NULL)
+				std::cout << "Value : " << getValue() << "\n";
+				/*if (getParent() != NULL)
 					std::cout << "Key Parent : " << getParent()->getKey() << "\n";
 				if (getLeft() != NULL)
 					std::cout << "Key Left : " << getLeft()->getKey() << "\n";
 				if (getRight() != NULL)
-					std::cout << "Key Right : " << getRight()->getKey() << "\n";
+					std::cout << "Key Right : " << getRight()->getKey() << "\n";*/
 				std::cout << "--------------------" << std::endl;
 			}
 

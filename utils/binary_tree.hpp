@@ -5,7 +5,7 @@
 #include <memory>
 #include "binary_tree_node.hpp"
 #include "pair.hpp"
-#include "../iterators/map_iterator.hpp"
+//#include "../iterators/map_iterator.hpp"
 
 namespace ft {
 
@@ -18,42 +18,53 @@ namespace ft {
 			typedef size_t 										size_type;
 			typedef ft::pair<Key, Value>						value_type;
 			typedef std::allocator<node>						allocator_type;
-			typedef ft::map_iterator<node, Key, Value>			iterator;
-			typedef ft::const_map_iterator<node, Key, Value>	const_iterator;
 
-			Tree() : _origin(node_ptr()), _overf(node_ptr()), _size(0), _comp(Compare()), _alloc(allocator_type()) {}
+			Tree() : _origin(NULL), _overf(NULL), _size(0), _comp(Compare()), _alloc(allocator_type()) {}
 			Tree(const Tree &src) {
 				*this = src;
 			}
-			//TODO Faire Deep Copy
 			Tree &operator=(const Tree &src) {
+				taGrosseMere();
+				if (_origin != NULL)
+					treeDelete(_origin);
 				_comp = src._comp;
 				_alloc = src._alloc;
-				_origin = src._origin;
-				_overf = src._end;
 				_size = src._size;
+				if (src._origin != NULL)
+					_origin = treeCopy(src._origin);
+				else
+					_origin = NULL;
+				_overf = NULL;
 				return *this;
 			}
-			//TODO Supprimer l'arbre correctement
 			~Tree() {
-				node_ptr cur = _origin;
-				node_ptr tmp = prev(cur);
-				while (tmp != NULL)
-				{
-					cur = tmp;
-					tmp = prev(cur);
+				if (_origin != NULL)
+					treeDelete(_origin);
+			}
 
-				}
-				tmp = next(cur);
-				while (tmp != NULL)
-				{
-					_alloc.destroy(cur);
-					//_alloc.deallocate(cur, 1);
-					cur = tmp;
-					tmp = next(cur);
-				}
+			void	treeDelete(node_ptr cur) {
+				if (cur->getLeft() != NULL)
+					treeDelete(cur->getLeft());
+				if (cur->getRight() != NULL)
+					treeDelete(cur->getRight());
 				_alloc.destroy(cur);
-				//_alloc.deallocate(cur, 1);
+				_alloc.deallocate(cur, 1);
+			}
+
+			node_ptr treeCopy(node_ptr c_cur) {
+				node_ptr cur = _alloc.allocate(1);
+				_alloc.construct(cur, node(c_cur->getPair()));
+				if (c_cur->getLeft() != NULL)
+				{
+					cur->setLeft(treeCopy(c_cur->getLeft()));
+					cur->getLeft()->setParent(cur);
+				}
+				if (c_cur->getRight() != NULL)
+				{
+					cur->setRight(treeCopy(c_cur->getRight()));
+					cur->getRight()->setParent(cur);
+				}
+				return (cur);
 			}
 
 			node_ptr add(const value_type &pair) {
@@ -88,8 +99,8 @@ namespace ft {
 				return (cur);
 			}
 
-			node_ptr search(Key s_key) {
-				if (!_origin)
+			node_ptr search(Key s_key) const {
+				if (_origin == NULL)
 					return (NULL);
 				node_ptr cur = _origin;
 				while (cur != NULL)
@@ -104,7 +115,7 @@ namespace ft {
 				return (NULL);
 			}
 
-			node_ptr next(node_ptr cur) {
+			node_ptr next(node_ptr cur) const {
 				if (!cur)
 					return (NULL);
 				if (cur->getRight() != NULL)
@@ -114,7 +125,7 @@ namespace ft {
 						cur = cur->getLeft();
 					return (cur);
 				}
-				if (cur == _origin)
+				if (cur->getParent() == NULL)
 					return (_overf);
 				while ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() != cur))
 					cur = cur->getParent();
@@ -123,7 +134,7 @@ namespace ft {
 				return (_overf);
 			}
 
-			node_ptr prev(node_ptr cur) {
+			node_ptr prev(node_ptr cur) const {
 				if (!cur)
 					return (NULL);
 				if (cur->getLeft() != NULL)
@@ -133,7 +144,7 @@ namespace ft {
 						cur = cur->getRight();
 					return (cur);
 				}
-				if (cur == _origin)
+				if (cur->getParent() == NULL)
 					return (_overf);
 				while ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() != cur))
 					cur = cur->getParent();
@@ -153,6 +164,7 @@ namespace ft {
 						n_del->getParent()->setRight(NULL);
 				}
 				_alloc.destroy(n_del);
+				_alloc.deallocate(n_del, 1);
 				n_del = NULL;
 				_size--;
 			}
@@ -180,6 +192,7 @@ namespace ft {
 					n_new->setParent(delParent);
 				}
 				_alloc.destroy(n_del);
+				_alloc.deallocate(n_del, 1);
 				n_del = NULL;
 				_size--;
 			}
@@ -190,7 +203,7 @@ namespace ft {
 				node_ptr delLeft = n_del->getLeft();
 				node_ptr delRight = n_del->getRight();
 
-				if (n_del->getRight() == n_new)
+				if ((n_del->getRight()) && n_del->getRight() == n_new)
 				{
 					n_new->setLeft(delLeft);
 					delLeft->setParent(n_new);
@@ -199,8 +212,8 @@ namespace ft {
 				else
 				{
 					//Possiblement retirer ce if, parce que forcement a gauche du parent si je suis dans le else
-					if ((n_new->getParent()->getLeft()) && (n_new->getParent()->getLeft() == n_new))
-					{
+					//if ((n_new->getParent()->getLeft()) && (n_new->getParent()->getLeft() == n_new))
+					//{
 						if (n_new->getRight() != NULL)
 						{
 							n_new->getRight()->setParent(n_new->getParent());
@@ -208,7 +221,7 @@ namespace ft {
 						}
 						else
 							n_new->getParent()->setLeft(NULL);
-					}
+					//}
 
 					n_new->setLeft(delLeft);
 					delLeft->setParent(n_new);
@@ -230,6 +243,7 @@ namespace ft {
 					n_new->setParent(delParent);
 				}
 				_alloc.destroy(n_del);
+				_alloc.deallocate(n_del, 1);
 				n_del = NULL;
 				_size--;
 			}
@@ -247,26 +261,35 @@ namespace ft {
 					del_twoChild(n_del);
 			}
 
-			node_ptr getOrigin() {
+			node_ptr getOrigin() const {
 				return (_origin);
 			}
 
-			node_ptr getBegin() {
+			node_ptr getBegin() const {
 				node_ptr cur = _origin;
 				while (prev(cur) != _overf)
 					cur = prev(cur);
 				return (cur);
 			}
 
-			node_ptr getEnd() {
+			node_ptr getEnd() const {
 				node_ptr cur = _origin;
 				while(next(cur) != _overf)
 					cur = next(cur);
 				return (cur);
 			}
 
-			size_type getSize() {
+			size_type getSize() const {
 				return (_size);
+			}
+
+			void taGrosseMere() {
+				node_ptr cur = getBegin();
+				while (cur != getEnd())
+				{
+					cur->printNode();
+					cur = next(cur);
+				}
 			}
 
 		private :
