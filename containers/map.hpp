@@ -65,10 +65,7 @@ namespace ft {
 																						 _tree(tree()) {
 				value_type tmp;
 				while (first != last)
-				{
-					_alloc.construct(&tmp, *first++);
-					_tree.add(tmp);
-				}
+					insert(*first++);
 			}
 			map (const map &x) {
 				*this = x;
@@ -79,39 +76,57 @@ namespace ft {
 			}
 			//Operator=
 			map &operator=(const map &src) {
+				clear();
 				_alloc = src._alloc;
 				_comp = src._comp;
-				_tree = src._tree;
+
+				for (const_iterator it = src.begin() ; it != src.end() ; it++) {
+					std::cout << it->first << std::endl;
+					insert(*it);
+				}
+				//_tree.setOrigin(_tree.treeCopy(src._tree.getOrigin()));
 				return (*this);
 			}
 
 			//Begin
 			iterator begin() {
-				return (iterator(_tree.getBegin()));
+				iterator it = _tree.getBegin();
+				return (it);
 			}
 			const_iterator begin() const {
-				return (const_iterator(_tree.getBegin()));
+				const_iterator it = _tree.getBegin();
+				return (it);
 			}
 			//End
 			iterator end() {
-				return (iterator(_tree.getEnd())++);
+				iterator it = _tree.getEnd();
+				it++;
+				return (it);
 			}
 			const_iterator end() const {
-				return (const_iterator(_tree.getEnd())++);
+				const_iterator it = _tree.getEnd();
+				it++;
+				return (it);
 			}
 			//rBegin
 			reverse_iterator rbegin() {
-				return (reverse_iterator(_tree.getEnd()));
+				reverse_iterator it = reverse_iterator(_tree.getEnd());
+				return (it);
 			}
 			const_reverse_iterator rbegin() const {
-				return (const_reverse_iterator(_tree.getEnd()));
+				const_reverse_iterator it = const_reverse_iterator(_tree.getEnd());
+				return (it);
 			}
 			//rEnd
 			reverse_iterator rend() {
-				return (reverse_iterator(_tree.getBegin())--);
+				reverse_iterator it = reverse_iterator(_tree.getBegin());
+				it++;
+				return (it);
 			}
 			const_reverse_iterator rend() const {
-				return (const_reverse_iterator(_tree.getBegin())--);
+				const_reverse_iterator it = const_reverse_iterator(_tree.getBegin());
+				it++;
+				return (it);
 			}
 
 			//Empty
@@ -124,7 +139,7 @@ namespace ft {
 			}
 			//Max_Size
 			size_type max_size() const {
-				return (allocator_type().max_size());
+				return (_tree.maxSize());
 			}
 
 			//Operator[]
@@ -137,7 +152,8 @@ namespace ft {
 
 			//Clear
 			void clear() {
-				_tree.treeDelete(_tree.getOrigin());
+				if (_tree.getOrigin() != NULL)
+					_tree.treeDelete(_tree.getOrigin());
 			}
 			//Insert
 			pair<iterator, bool> insert (const value_type &val) {
@@ -226,26 +242,26 @@ namespace ft {
 			//Lower_Bound
 			iterator lower_bound(const key_type &k) {
 				iterator it = begin();
-				while (_comp(it->first, k) && it != end())
+				while (it != end() && _comp(it->first, k))
 					it++;
 				return (it);
 			}
 			const_iterator lower_bound(const key_type &k) const {
 				const_iterator it = begin();
-				while (_comp(it->first, k) && it != end())
+				while (it != end() && _comp(it->first, k))
 					it++;
 				return (it);
 			}
 			//Upper_Bound
 			iterator upper_bound(const key_type &k) {
 				iterator it = begin();
-				while (!(_comp(it->first, k)) && it != end())
+				while (it != end() && _comp(k, it->first) == false)
 					it++;
 				return (it);
 			}
 			const_iterator upper_bound(const key_type &k) const {
 				const_iterator it = begin();
-				while (!(_comp(it->first, k)) && it != end())
+				while (it != end() && _comp(k, it->first) == false)
 					it++;
 				return (it);
 			}
@@ -268,6 +284,8 @@ namespace ft {
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator==(const map<Key, T, Compare, Alloc> &lhs,
 					const map<Key, T, Compare, Alloc> &rhs) {
+		if (lhs.size() != rhs.size())
+			return (false);
 		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 	//Operator!=

@@ -80,6 +80,42 @@ namespace ft {
 				return (_data);
 			}
 
+			pointer nextNode() {
+				pointer cur = this;
+				if (cur->getRight() != NULL)
+				{
+					cur = cur->getRight();
+					while (cur->getLeft() != NULL)
+						cur = cur->getLeft();
+					return (cur);
+				}
+				if (cur->getParent() == NULL)
+					return (NULL);
+				while ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() != cur))
+					cur = cur->getParent();
+				if ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() == cur))
+					return (cur->getParent());
+				return (NULL);
+			}
+
+			pointer prevNode() {
+				pointer cur = this;
+				if (cur->getLeft() != NULL)
+				{
+					cur = cur->getLeft();
+					while (cur->getRight() != NULL)
+						cur = cur->getRight();
+					return (cur);
+				}
+				if (cur->getParent() == NULL)
+					return (NULL);
+				while ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() != cur))
+					cur = cur->getParent();
+				if ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() == cur))
+					return (cur->getParent());
+				return (NULL);
+			}
+
 			void printNode() {
 				std::cout << "Key : " << getKey() << "\n";
 				std::cout << "Value : " << getValue() << "\n";

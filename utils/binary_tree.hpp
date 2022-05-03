@@ -19,12 +19,16 @@ namespace ft {
 			typedef ft::pair<Key, Value>						value_type;
 			typedef std::allocator<node>						allocator_type;
 
-			Tree() : _origin(NULL), _overf(NULL), _size(0), _comp(Compare()), _alloc(allocator_type()) {}
+			Tree() : _origin(NULL), _size(0), _comp(Compare()), _alloc(allocator_type()) {
+				_begin = _alloc.allocate(1);
+				_alloc.construct(_begin, node());
+				_end = _alloc.allocate(1);
+				_alloc.construct(_end, node());
+			}
 			Tree(const Tree &src) {
 				*this = src;
 			}
 			Tree &operator=(const Tree &src) {
-				taGrosseMere();
 				if (_origin != NULL)
 					treeDelete(_origin);
 				_comp = src._comp;
@@ -34,21 +38,28 @@ namespace ft {
 					_origin = treeCopy(src._origin);
 				else
 					_origin = NULL;
-				_overf = NULL;
 				return *this;
 			}
 			~Tree() {
 				if (_origin != NULL)
 					treeDelete(_origin);
+				_alloc.deallocate(_begin, 1);
+				_alloc.deallocate(_end, 1);
 			}
 
 			void	treeDelete(node_ptr cur) {
+				if (_origin == NULL)
+					return ;
 				if (cur->getLeft() != NULL)
 					treeDelete(cur->getLeft());
 				if (cur->getRight() != NULL)
 					treeDelete(cur->getRight());
 				_alloc.destroy(cur);
 				_alloc.deallocate(cur, 1);
+			}
+
+			size_type maxSize() const {
+				return (_alloc.max_size());
 			}
 
 			node_ptr treeCopy(node_ptr c_cur) {
@@ -126,12 +137,12 @@ namespace ft {
 					return (cur);
 				}
 				if (cur->getParent() == NULL)
-					return (_overf);
+					return (_end);
 				while ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() != cur))
 					cur = cur->getParent();
 				if ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() == cur))
 					return (cur->getParent());
-				return (_overf);
+				return (_end);
 			}
 
 			node_ptr prev(node_ptr cur) const {
@@ -145,12 +156,12 @@ namespace ft {
 					return (cur);
 				}
 				if (cur->getParent() == NULL)
-					return (_overf);
+					return (_begin);
 				while ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() != cur))
 					cur = cur->getParent();
 				if ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() == cur))
 					return (cur->getParent());
-				return (_overf);
+				return (_begin);
 			}
 
 			void del_noChild(node_ptr &n_del) {
@@ -261,20 +272,24 @@ namespace ft {
 					del_twoChild(n_del);
 			}
 
+			void setOrigin(node_ptr cur) {
+				_origin = cur;
+			}
+
 			node_ptr getOrigin() const {
 				return (_origin);
 			}
 
 			node_ptr getBegin() const {
 				node_ptr cur = _origin;
-				while (prev(cur) != _overf)
+				while (prev(cur) != _begin)
 					cur = prev(cur);
 				return (cur);
 			}
 
 			node_ptr getEnd() const {
 				node_ptr cur = _origin;
-				while(next(cur) != _overf)
+				while(next(cur) != _end)
 					cur = next(cur);
 				return (cur);
 			}
@@ -283,21 +298,13 @@ namespace ft {
 				return (_size);
 			}
 
-			void taGrosseMere() {
-				node_ptr cur = getBegin();
-				while (cur != getEnd())
-				{
-					cur->printNode();
-					cur = next(cur);
-				}
-			}
-
 		private :
 			node_ptr		_origin;
-			node_ptr 		_overf;
 			size_type		_size;
 			Compare			_comp;
 			allocator_type	_alloc;
+			node_ptr 		_begin;
+			node_ptr		_end;
 	};
 
 

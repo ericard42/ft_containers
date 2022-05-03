@@ -411,11 +411,7 @@ namespace ft {
 			void swap(vector &x) {
 				if (x == *this)
 					return ;
-				vector tmp = x;
-				x = *this;
-				*this = tmp;
-				//TODO test swap and delete comment if it's good
-				/*allocator_type tmp_alloc = _alloc;
+				allocator_type tmp_alloc = _alloc;
 				pointer tmp_first = _first;
 				pointer tmp_last = _last;
 				size_type tmp_max = _max;
@@ -428,7 +424,7 @@ namespace ft {
 				x._alloc = tmp_alloc;
 				x._first = tmp_first;
 				x._last = tmp_last;
-				x._max = tmp_max;*/
+				x._max = tmp_max;
 			}
 
 			void clear() {
@@ -457,6 +453,8 @@ namespace ft {
 	//relational operators
 	template <class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+		if (lhs.size() != rhs.size())
+			return (false);
 		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 		/*if (lhs.size() != rhs.size())
 			return (false);
