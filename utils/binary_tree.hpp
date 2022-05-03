@@ -31,6 +31,10 @@ namespace ft {
 			Tree &operator=(const Tree &src) {
 				if (_origin != NULL)
 					treeDelete(_origin);
+				if (_begin != NULL)
+					_alloc.deallocate(_begin, 1);
+				if (_end != NULL)
+					_alloc.deallocate(_end, 1);
 				_comp = src._comp;
 				_alloc = src._alloc;
 				_size = src._size;
@@ -38,6 +42,10 @@ namespace ft {
 					_origin = treeCopy(src._origin);
 				else
 					_origin = NULL;
+				_begin = alloc.allocate(1);
+				_alloc.construct(_begin, node());
+				_end = _alloc.allocate(1);
+				_alloc.construct(_end, node());
 				return *this;
 			}
 			~Tree() {
@@ -129,6 +137,8 @@ namespace ft {
 			node_ptr next(node_ptr cur) const {
 				if (!cur)
 					return (NULL);
+				if (cur == _begin)
+					return (getBegin());
 				if (cur->getRight() != NULL)
 				{
 					cur = cur->getRight();
@@ -148,6 +158,8 @@ namespace ft {
 			node_ptr prev(node_ptr cur) const {
 				if (!cur)
 					return (NULL);
+				if (cur == _end)
+					return (getEnd());
 				if (cur->getLeft() != NULL)
 				{
 					cur = cur->getLeft();
@@ -261,6 +273,8 @@ namespace ft {
 
 			void del(node_ptr &n_del) {
 				if (!n_del)
+					return ;
+				if (n_del == _end || n_del == _begin)
 					return ;
 				if (search(n_del->getKey()) == NULL)
 					return ;
