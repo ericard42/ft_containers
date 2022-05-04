@@ -30,7 +30,10 @@ namespace ft {
 			}
 			Tree &operator=(const Tree &src) {
 				if (_origin != NULL)
+				{
 					treeDelete(_origin);
+					_size = 0;
+				}
 				if (_begin != NULL)
 					_alloc.deallocate(_begin, 1);
 				if (_end != NULL)
@@ -42,7 +45,7 @@ namespace ft {
 					_origin = treeCopy(src._origin);
 				else
 					_origin = NULL;
-				_begin = alloc.allocate(1);
+				_begin = _alloc.allocate(1);
 				_alloc.construct(_begin, node());
 				_end = _alloc.allocate(1);
 				_alloc.construct(_end, node());
@@ -50,20 +53,42 @@ namespace ft {
 			}
 			~Tree() {
 				if (_origin != NULL)
+				{
 					treeDelete(_origin);
-				_alloc.deallocate(_begin, 1);
-				_alloc.deallocate(_end, 1);
+					_size = 0;
+				}
+				if (_begin != NULL)
+				{
+					_alloc.deallocate(_begin, 1);
+					_begin = NULL;
+				}
+				if (_end != NULL)
+				{
+					_alloc.deallocate(_end, 1);
+					_end = NULL;
+				}
 			}
 
 			void	treeDelete(node_ptr cur) {
 				if (_origin == NULL)
 					return ;
 				if (cur->getLeft() != NULL)
+				{
 					treeDelete(cur->getLeft());
+					cur->setLeft(NULL);
+				}
 				if (cur->getRight() != NULL)
+				{
 					treeDelete(cur->getRight());
-				_alloc.destroy(cur);
-				_alloc.deallocate(cur, 1);
+					cur->setRight(NULL);
+				}
+				if (cur != NULL)
+				{
+					_alloc.destroy(cur);
+					_alloc.deallocate(cur, 1);
+					cur = NULL;
+				}
+				_size = 0;
 			}
 
 			size_type maxSize() const {
@@ -296,14 +321,14 @@ namespace ft {
 
 			node_ptr getBegin() const {
 				node_ptr cur = _origin;
-				while (prev(cur) != _begin)
+				while (prev(cur) != NULL && prev(cur) != _begin)
 					cur = prev(cur);
 				return (cur);
 			}
 
 			node_ptr getEnd() const {
 				node_ptr cur = _origin;
-				while(next(cur) != _end)
+				while(next(cur) != NULL && next(cur) != _end)
 					cur = next(cur);
 				return (cur);
 			}

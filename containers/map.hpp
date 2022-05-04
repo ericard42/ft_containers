@@ -18,21 +18,21 @@ namespace ft {
 
 		public:
 			//Member Types
-			typedef Key															key_type;
-			typedef T															mapped_type;
-			typedef	ft::pair<const Key, T>										value_type;
-			typedef size_t														size_type;
-			typedef ptrdiff_t													difference_type;
-			typedef Compare														key_compare;
-			typedef Allocator													allocator_type;
-			typedef typename allocator_type::reference							reference;
-			typedef typename allocator_type::const_reference					const_reference;
-			typedef typename allocator_type::pointer							pointer;
-			typedef typename allocator_type::const_pointer						const_pointer;
-			typedef typename ft::map_iterator<treeNode<Key, T>, Key, T>			iterator;
-			typedef typename ft::const_map_iterator<treeNode<Key, T>, Key, T>	const_iterator;
-			typedef typename ft::reverse_iterator<iterator>						reverse_iterator;
-			typedef typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+			typedef Key																		key_type;
+			typedef T																		mapped_type;
+			typedef	ft::pair<const Key, T>													value_type;
+			typedef size_t																	size_type;
+			typedef ptrdiff_t																difference_type;
+			typedef Compare																	key_compare;
+			typedef Allocator																allocator_type;
+			typedef typename allocator_type::reference										reference;
+			typedef typename allocator_type::const_reference								const_reference;
+			typedef typename allocator_type::pointer										pointer;
+			typedef typename allocator_type::const_pointer									const_pointer;
+			typedef typename ft::map_iterator<treeNode<Key, T>, Key, T, Compare>			iterator;
+			typedef typename ft::const_map_iterator<treeNode<Key, T>, Key, T, Compare>		const_iterator;
+			typedef typename ft::reverse_iterator<iterator>									reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>							const_reverse_iterator;
 
 			class value_compare : std::binary_function<value_type, value_compare, bool> {
 					friend class map;
@@ -80,51 +80,49 @@ namespace ft {
 				_alloc = src._alloc;
 				_comp = src._comp;
 
-				for (const_iterator it = src.begin() ; it != src.end() ; it++) {
-					std::cout << it->first << std::endl;
+				for (const_iterator it = src.begin() ; it != src.end() ; it++)
 					insert(*it);
-				}
 				//_tree.setOrigin(_tree.treeCopy(src._tree.getOrigin()));
 				return (*this);
 			}
 
 			//Begin
 			iterator begin() {
-				iterator it = _tree.getBegin();
+				iterator it = iterator(&_tree, _tree.getBegin());
 				return (it);
 			}
 			const_iterator begin() const {
-				const_iterator it = _tree.getBegin();
+				const_iterator it = const_iterator(&_tree, _tree.getBegin());
 				return (it);
 			}
 			//End
 			iterator end() {
-				iterator it = _tree.getEnd();
+				iterator it = iterator(&_tree, _tree.getEnd());
 				it++;
 				return (it);
 			}
 			const_iterator end() const {
-				const_iterator it = _tree.getEnd();
+				const_iterator it = const_iterator(&_tree, _tree.getEnd());
 				it++;
 				return (it);
 			}
 			//rBegin
 			reverse_iterator rbegin() {
-				reverse_iterator it = reverse_iterator(_tree.getEnd());
+				reverse_iterator it = reverse_iterator(iterator(&_tree, _tree.getEnd()));
 				return (it);
 			}
 			const_reverse_iterator rbegin() const {
-				const_reverse_iterator it = const_reverse_iterator(_tree.getEnd());
+				const_reverse_iterator it = const_reverse_iterator(const_iterator(&_tree, _tree.getEnd()));
 				return (it);
 			}
 			//rEnd
 			reverse_iterator rend() {
-				reverse_iterator it = reverse_iterator(_tree.getBegin());
+				reverse_iterator it = reverse_iterator(iterator(&_tree, _tree.getBegin()));
 				it++;
 				return (it);
 			}
 			const_reverse_iterator rend() const {
-				const_reverse_iterator it = const_reverse_iterator(_tree.getBegin());
+				const_reverse_iterator it = const_reverse_iterator(const_iterator(&_tree, _tree.getBegin()));
 				it++;
 				return (it);
 			}
@@ -154,16 +152,17 @@ namespace ft {
 			void clear() {
 				if (_tree.getOrigin() != NULL)
 					_tree.treeDelete(_tree.getOrigin());
+				_tree.setOrigin(NULL);
 			}
 			//Insert
 			pair<iterator, bool> insert (const value_type &val) {
 				node cur = _tree.search(val.first);
 				if (cur != NULL)
-					return (ft::make_pair(iterator(cur), false));
+					return (ft::make_pair(iterator(&_tree, cur), false));
 				value_type pair;
 				_alloc.construct(&pair, val);
 				cur = _tree.add(pair);
-				return (ft::make_pair(iterator(cur), true));
+				return (ft::make_pair(iterator(&_tree, cur), true));
 			}
 			iterator insert(iterator position, const value_type &val) {
 				(void)position;
@@ -225,10 +224,10 @@ namespace ft {
 			}
 			//Find
 			iterator find(const key_type &k) {
-				return (iterator(_tree.search(k)));
+				return (iterator(&_tree, _tree.search(k)));
 			}
 			const_iterator find(const key_type &k) const {
-				return (const_iterator(_tree.search(k)));
+				return (const_iterator(&_tree, _tree.search(k)));
 			}
 			//Equal_Range
 			pair<iterator, iterator> equal_range(const key_type &k) {

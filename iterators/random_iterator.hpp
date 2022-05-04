@@ -49,12 +49,12 @@ namespace ft {
 			random_iterator operator+(difference_type n) const {
 				return (random_iterator(_p + n));
 			}
-			//a++
+			//++a
 			random_iterator &operator++() {
 				_p++;
 				return (*this);
 			}
-			//++a
+			//a++
 			random_iterator operator++(int) {
 				random_iterator tmp = *this;
 				_p++;
@@ -69,12 +69,12 @@ namespace ft {
 			random_iterator operator-(difference_type n) const {
 				return (random_iterator(_p - n));
 			}
-			//a--
+			//--a
 			random_iterator &operator--() {
 				_p--;
 				return (*this);
 			}
-			//--a
+			//a--
 			random_iterator operator--(int) {
 				random_iterator tmp = *this;
 				_p--;

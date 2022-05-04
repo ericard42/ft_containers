@@ -97,7 +97,6 @@ namespace ft {
 			pointer _parent;
 			pointer _right;
 			pointer _left;
-
 	};
 
 	template <class Key, class Value>
