@@ -109,21 +109,21 @@ namespace ft {
 			//rBegin
 			reverse_iterator rbegin() {
 				reverse_iterator it = reverse_iterator(iterator(&_tree, _tree.getEnd()));
+				it--;
 				return (it);
 			}
 			const_reverse_iterator rbegin() const {
 				const_reverse_iterator it = const_reverse_iterator(const_iterator(&_tree, _tree.getEnd()));
+				it--;
 				return (it);
 			}
 			//rEnd
 			reverse_iterator rend() {
 				reverse_iterator it = reverse_iterator(iterator(&_tree, _tree.getBegin()));
-				it++;
 				return (it);
 			}
 			const_reverse_iterator rend() const {
 				const_reverse_iterator it = const_reverse_iterator(const_iterator(&_tree, _tree.getBegin()));
-				it++;
 				return (it);
 			}
 
@@ -200,11 +200,7 @@ namespace ft {
 			}
 			//Swap
 			void swap (map &x) {
-				if (x == *this)
-					return ;
-				map tmp = x;
-				x = *this;
-				*this = tmp;
+				_tree.swap(x._tree);
 			}
 
 			//Key_Comp

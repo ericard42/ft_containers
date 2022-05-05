@@ -173,9 +173,9 @@ namespace ft {
 				}
 				if (cur->getParent() == NULL)
 					return (_end);
-				while ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() != cur))
+				while ((cur->getParent() != NULL) && /*(cur->getParent()->getLeft() != NULL) &&*/ (cur->getParent()->getLeft() != cur))
 					cur = cur->getParent();
-				if ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != NULL) && (cur->getParent()->getLeft() == cur))
+				if ((cur->getParent() != NULL) && /*(cur->getParent()->getLeft() != NULL) &&*/ (cur->getParent()->getLeft() == cur))
 					return (cur->getParent());
 				return (_end);
 			}
@@ -194,9 +194,9 @@ namespace ft {
 				}
 				if (cur->getParent() == NULL)
 					return (_begin);
-				while ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() != cur))
+				while ((cur->getParent() != NULL) && /*(cur->getParent()->getRight() != NULL) &&*/ (cur->getParent()->getRight() != cur))
 					cur = cur->getParent();
-				if ((cur->getParent() != NULL) && (cur->getParent()->getRight() != NULL) && (cur->getParent()->getRight() == cur))
+				if ((cur->getParent() != NULL) && /*(cur->getParent()->getRight() != NULL) &&*/ (cur->getParent()->getRight() == cur))
 					return (cur->getParent());
 				return (_begin);
 			}
@@ -305,7 +305,7 @@ namespace ft {
 					return ;
 				if (n_del->getLeft() == NULL && n_del->getRight() == NULL)
 					del_noChild(n_del);
-				else if (n_del->getLeft() == NULL || n_del->getLeft() == NULL)
+				else if (n_del->getLeft() == NULL || n_del->getRight() == NULL)
 					del_oneChild(n_del);
 				else
 					del_twoChild(n_del);
@@ -314,6 +314,18 @@ namespace ft {
 			void setOrigin(node_ptr cur) {
 				_origin = cur;
 			}
+
+			/*void setSize(size_type s) {
+				_size = s;
+			}
+
+			void setBegin(node_ptr cur) {
+				_begin = cur;
+			}
+
+			void setEnd(node_ptr cur) {
+				_end = cur;
+			}*/
 
 			node_ptr getOrigin() const {
 				return (_origin);
@@ -333,8 +345,33 @@ namespace ft {
 				return (cur);
 			}
 
+			node_ptr getPastEnd() const {
+				return (_end);
+			}
+
+			node_ptr getPastBegin() const {
+				return (_begin);
+			}
+
 			size_type getSize() const {
 				return (_size);
+			}
+
+			void swap(Tree &x) {
+				node_ptr tmp_origin = x._origin;
+				node_ptr tmp_begin = x._begin;
+				node_ptr tmp_end = x._end;
+				size_type tmp_size = x._size;
+
+				x._origin =_origin;
+				x._begin =_begin;
+				x._end = _end;
+				x._size = _size;
+
+				_origin = tmp_origin;
+				_begin = tmp_begin;
+				_end = tmp_end;
+				_size = tmp_size;
 			}
 
 		private :

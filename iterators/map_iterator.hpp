@@ -50,28 +50,28 @@ namespace ft {
 				return (&(_cur->getPair()));
 			}
 
-			//Operator++
+			//++Operator
 			map_iterator &operator++() {
 				_cur = _tree->next(_cur);
 				return (*this);
 			}
-			//++Operator
+			//Operator++
 			map_iterator operator++(int) {
 				map_iterator tmp = *this;
 				_cur = _tree->next(_cur);
 				return (tmp);
 			}
 
-			//Operator--
+			//--Operator
 			map_iterator &operator--() {
 				_cur = _tree->prev(_cur);
 				return (*this);
 			}
-			//--Operator
+			//Operator--
 			map_iterator operator--(int) {
 				map_iterator tmp = *this;
 				_cur = _tree->prev(_cur);
-				return (*this);
+				return (tmp);
 			}
 
 			bool operator==(const map_iterator &other) {
@@ -98,7 +98,8 @@ namespace ft {
 			//T = Node
 			typedef const Tree<Key, Value, Compare>* _Tree;
 			typedef T* node;
-			typedef typename T::value_type value_type; //Pair
+			typedef typename T::value_type value_t; //Pair
+			typedef const value_t value_type;
 			typedef typename ft::iterator<std::bidirectional_iterator_tag, value_type>::pointer pointer;
 			typedef typename ft::iterator<std::bidirectional_iterator_tag, value_type>::reference reference;
 			typedef typename ft::iterator<std::bidirectional_iterator_tag, value_type>::difference_type difference_type;
@@ -138,28 +139,28 @@ namespace ft {
 				return (&(_cur->getPair()));
 			}
 
-			//Operator++
+			//++Operator
 			const_map_iterator &operator++() {
 				_cur = _tree->next(_cur);
 				return (*this);
 			}
-			//++Operator
+			//Operator++
 			const_map_iterator operator++(int) {
 				const_map_iterator tmp = *this;
 				_cur = _tree->next(_cur);
 				return (tmp);
 			}
 
-			//Operator--
+			//--Operator
 			const_map_iterator &operator--() {
 				_cur = _tree->prev(_cur);
 				return (*this);
 			}
-			//--Operator
+			//Operator--
 			const_map_iterator operator--(int) {
 				const_map_iterator tmp = *this;
 				_cur = _tree->prev(_cur);
-				return (*this);
+				return (tmp);
 			}
 
 			bool operator==(const const_map_iterator &other) {
