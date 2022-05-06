@@ -86,7 +86,11 @@ namespace ft {
 			vector &operator=(const vector &x) {
 				if (x == *this)
 					return (*this);
-				clear();
+				if (_first != NULL)
+				{
+					clear();
+					_alloc.deallocate(_first, _max);
+				}
 				pointer xfirst = x._first;
 				size_type n = ft::distance(x.begin(), x.end());
 				_first = _alloc.allocate(n);
@@ -180,6 +184,7 @@ namespace ft {
 					for (size_type i = 0; (tmp_first + i) != tmp_last; i++)
 					{
 						_alloc.construct(_last, *(tmp_first + i));
+						_alloc.destroy(tmp_first + i);
 						_last++;
 					}
 					_alloc.deallocate(tmp_first, tmp_max);
@@ -240,7 +245,8 @@ namespace ft {
 				}
 				else
 				{
-					_alloc.deallocate(_first, _max);
+					if (_first != NULL)
+						_alloc.deallocate(_first, _max);
 					_first = _alloc.allocate(n);
 					_max = n;
 					_last = _first;
@@ -265,7 +271,8 @@ namespace ft {
 				}
 				else
 				{
-					_alloc.deallocate(_first, _max);
+					if (_first != NULL)
+						_alloc.deallocate(_first, _max);
 					_first = _alloc.allocate(n);
 					_max = n;
 					_last = _first;
@@ -333,12 +340,14 @@ namespace ft {
 				}
 				pointer tmp = _last + (n - 1);
 				_last += n;
-				while (tmp != pos)
+				while (tmp - n >= pos)
 				{
 					_alloc.construct(tmp, *(tmp - n));
 					_alloc.destroy(tmp - n);
 					tmp--;
 				}
+				while (tmp != pos)
+					tmp--;
 				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.construct(tmp, val);
@@ -362,12 +371,14 @@ namespace ft {
 				}
 				pointer tmp = _last + (n - 1);
 				_last += n;
-				while (tmp != pos)
+				while (tmp - n >= pos)
 				{
 					_alloc.construct(tmp, *(tmp - n));
 					_alloc.destroy(tmp - n);
 					tmp--;
 				}
+				while (tmp != pos)
+					tmp--;
 				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.construct(tmp, *first);
@@ -456,18 +467,6 @@ namespace ft {
 		if (lhs.size() != rhs.size())
 			return (false);
 		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
-		/*if (lhs.size() != rhs.size())
-			return (false);
-		typename ft::vector<T>::const_iterator lhs_it = lhs.begin();
-		typename ft::vector<T>::const_iterator rhs_it = rhs.begin();
-		while (lhs_it != lhs.end())
-		{
-			if (rhs_it == rhs.end() || *lhs_it != *rhs_it)
-				return (false);
-			lhs_it++;
-			rhs_it++;
-		}
-		return (true);*/
 	}
 	template <class T, class Alloc>
 	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {

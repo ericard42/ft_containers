@@ -1,143 +1,75 @@
 #include <iostream>
-//#include "containers/vector.hpp"
+#include "containers/vector.hpp"
 //#include "containers/stack.hpp"
-//#include "utils/binary_tree.hpp"
-//#include "utils/binary_tree_node.hpp"
+#include "utils/binary_tree.hpp"
+#include "utils/binary_tree_node.hpp"
 #include "containers/map.hpp"
-#include "utils/pair.hpp"
+//#include "utils/pair.hpp"
 //#include <vector>
 
-int main2() {
-	ft::Tree<int, int> arbre;
-	//arbre.add(ft::make_pair(42, 2));
-	//arbre.add(ft::make_pair(1, 4));
-	//arbre.add(ft::make_pair(4, 5));
-
-	ft::Tree<int, int> arbre2;
-	arbre2 = arbre;
-	return 0;
-}
-
-int main3() {
-	ft::map<char, int> first;
-
-	first['a'] = 10;
-	first['b'] = 42;
-	first['c'] = 84;
-
-	ft::map<char, int> second = first;
-	ft::map<char, int>::iterator it1 = first.begin();
-	ft::map<char, int>::iterator it2 = second.begin();
-
-	for (; it1 != first.end() ; it1++)
-		it1.base()->printNode();
-	for (; it2 != second.end() ; it2++)
-		it2.base()->printNode();
-	return 0;
-}
-
-#include "containers/containers_test/srcs/map/../base.hpp"
+#include "containers/containers_test/srcs/base.hpp"
 #if !defined(USING_STD)
-# include "containers/map.hpp"
+# include "containers/vector.hpp"
 #else
-# include <map>
+# include <vector>
 #endif /* !defined(STD) */
 
-#define _pair TESTED_NAMESPACE::pair
+#define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
 
 template <typename T>
-std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
+void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
 {
-	o << "key: " << iterator->first << " | value: " << iterator->second;
-	if (nl)
-		o << std::endl;
-	return ("");
+const T_SIZE_TYPE size = vct.size();
+const T_SIZE_TYPE capacity = vct.capacity();
+const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
+// Cannot limit capacity's max value because it's implementation dependent
+
+std::cout << "size: " << size << std::endl;
+std::cout << "capacity: " << isCapacityOk << std::endl;
+std::cout << "max_size: " << vct.max_size() << std::endl;
+if (print_content)
+{
+typename TESTED_NAMESPACE::vector<T>::const_iterator it = vct.begin();
+typename TESTED_NAMESPACE::vector<T>::const_iterator ite = vct.end();
+std::cout << std::endl << "Content is:" << std::endl;
+for (; it != ite; ++it)
+std::cout << "- " << *it << std::endl;
+}
+std::cout << "###############################################" << std::endl;
 }
 
-template <typename T_MAP>
-void	printSize(T_MAP const &mp, bool print_content = 1)
-{
-	std::cout << "size: " << mp.size() << std::endl;
-	//std::cout << "max_size: " << mp.max_size() << std::endl;
-	if (print_content)
-	{
-		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << printPair(it, false) << std::endl;
-	}
-	std::cout << "###############################################" << std::endl;
-}
+//------------------------------------------
 
-template <typename T1, typename T2>
-void	printReverse(TESTED_NAMESPACE::map<T1, T2> &mp)
-{
-	typename TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.end(), ite = mp.begin();
-
-	std::cout << "printReverse:" << std::endl;
-	while (it != ite) {
-		it--;
-		std::cout << "-> " << printPair(it, false) << std::endl;
-	}
-	std::cout << "_______________________________________________" << std::endl;
-}
-
-//--------------------------------//--------------------------------
-
-#include <list>
-
-#define T1 int
-#define T2 std::string
-typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
-
-static int iter = 0;
-
-template <typename MAP, typename U>
-void	ft_insert(MAP &mp, U param, U param2)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	mp.insert(param, param2);
-	printSize(mp);
-}
+#define TESTED_TYPE int
 
 int		main(void)
 {
-	std::list<T3> lst;
-	std::list<T3>::iterator itlst;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
 
-	lst.push_back(T3(42, "lol"));
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	printSize(vct);
 
-	lst.push_back(T3(50, "mdr"));
-	lst.push_back(T3(35, "funny"));
+	vct2.insert(vct2.end(), 42);
+	vct2.insert(vct2.begin(), 2, 21);
+	printSize(vct2);
 
-	lst.push_back(T3(45, "bunny"));
-	lst.push_back(T3(21, "fizz"));
-	lst.push_back(T3(38, "buzz"));
-	lst.push_back(T3(55, "fuzzy"));
+	vct2.insert(vct2.end() - 2, 42);
+	printSize(vct2);
 
-	std::cout << "List contains:" << std::endl;
-	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
-		printPair(itlst);
+	vct2.insert(vct2.end(), 2, 84);
+	printSize(vct2);
 
-	TESTED_NAMESPACE::map<T1, T2> mp;
-	ft_insert(mp, lst.begin(), lst.end());
+	vct2.resize(4);
+	printSize(vct2);
 
-	lst.clear();
+	vct2.insert(vct2.begin() + 2, vct.begin(), vct.end());
+	vct.clear();
+	printSize(vct2);
 
-	lst.push_back(T3(87, "hey"));
-	lst.push_back(T3(47, "eqweqweq"));
-	lst.push_back(T3(35, "this key is already inside"));
-	lst.push_back(T3(23, "but not that one"));
-	lst.push_back(T3(1, "surprising isnt it?"));
-	lst.push_back(T3(100, "is it enough??"));
-	lst.push_back(T3(55, "inside map too"));
-
-	std::cout << "List contains:" << std::endl;
-	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
-		printPair(itlst);
-
-	ft_insert(mp, lst.begin(), lst.begin());
-	ft_insert(mp, lst.begin(), lst.end());
-
+	printSize(vct);
 	return (0);
 }
+
+
