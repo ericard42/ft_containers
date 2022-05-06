@@ -55,7 +55,7 @@ namespace ft {
 			explicit map (const key_compare &comp = key_compare(),
 						  const allocator_type &alloc = allocator_type()) : _alloc(alloc),
 						  													_comp(comp),
-																			_tree(tree()){
+																			_tree(tree()) {
 			}
 			template <class InputIterator>
 			map (typename ft::enable_if<!(ft::is_integral<InputIterator>::value), InputIterator>::type first,
@@ -89,21 +89,29 @@ namespace ft {
 			//Begin
 			iterator begin() {
 				iterator it = iterator(&_tree, _tree.getBegin());
+				if (it.base() == NULL)
+					return (end());
 				return (it);
 			}
 			const_iterator begin() const {
 				const_iterator it = const_iterator(&_tree, _tree.getBegin());
+				if (it.base() == NULL)
+					return (end());
 				return (it);
 			}
 			//End
 			iterator end() {
 				iterator it = iterator(&_tree, _tree.getEnd());
 				it++;
+				if (it.base() == NULL)
+					return (iterator(&_tree, _tree.getPastEnd()));
 				return (it);
 			}
 			const_iterator end() const {
 				const_iterator it = const_iterator(&_tree, _tree.getEnd());
 				it++;
+				if (it.base() == NULL)
+					return (const_iterator(&_tree, _tree.getPastEnd()));
 				return (it);
 			}
 			//rBegin
@@ -170,11 +178,10 @@ namespace ft {
 			}
 			template <class InputIterator>
 			void insert (typename ft::enable_if<!(ft::is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
-				value_type pair;
 				while (first != last)
 				{
-					_alloc.construct(&pair, *first++);
-					_tree.add(pair);
+					insert(*first);
+					first++;
 				}
 			}
 			//Erase
@@ -194,8 +201,8 @@ namespace ft {
 				while (first != last)
 				{
 					cur = first.base();
-					_tree.del(cur);
 					first++;
+					_tree.del(cur);
 				}
 			}
 			//Swap
@@ -220,10 +227,16 @@ namespace ft {
 			}
 			//Find
 			iterator find(const key_type &k) {
-				return (iterator(&_tree, _tree.search(k)));
+				node ret = _tree.search(k);
+				if (ret == NULL)
+					ret = _tree.getPastEnd();
+				return (iterator(&_tree, ret));
 			}
 			const_iterator find(const key_type &k) const {
-				return (const_iterator(&_tree, _tree.search(k)));
+				node ret = _tree.search(k);
+				if (ret == NULL)
+					ret = _tree.getPastEnd();
+				return (const_iterator(&_tree, ret));
 			}
 			//Equal_Range
 			pair<iterator, iterator> equal_range(const key_type &k) {

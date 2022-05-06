@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 98)
 
 
 set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
+#set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98 -fsanitize=address")
 #set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -std=c++98")
 
 add_executable(
