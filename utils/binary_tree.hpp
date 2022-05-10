@@ -69,6 +69,15 @@ namespace ft {
 				}
 			}
 
+			void treeReset() {
+				_origin = NULL;
+				_begin = NULL;
+				_end = NULL;
+				_size = 0;
+				_comp = Compare();
+				_alloc = allocator_type();
+			}
+
 			void	treeDelete(node_ptr cur) {
 				if (_origin == NULL)
 					return ;
@@ -359,18 +368,18 @@ namespace ft {
 
 			void swap(Tree &x) {
 				node_ptr tmp_origin = x._origin;
-				//node_ptr tmp_begin = x._begin;
-				//node_ptr tmp_end = x._end;
+				node_ptr tmp_begin = x._begin;
+				node_ptr tmp_end = x._end;
 				size_type tmp_size = x._size;
 
 				x._origin =_origin;
-				//x._begin =_begin;
-				//x._end = _end;
+				x._begin =_begin;
+				x._end = _end;
 				x._size = _size;
 
 				_origin = tmp_origin;
-				//_begin = tmp_begin;
-				//_end = tmp_end;
+				_begin = tmp_begin;
+				_end = tmp_end;
 				_size = tmp_size;
 			}
 

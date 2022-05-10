@@ -326,6 +326,8 @@ namespace ft {
 				return (iterator(tmp_cur));
 			}
 			void insert(iterator position, size_type n, const value_type &val) {
+				if (n == 0)
+					return ;
 				pointer pos = &(*position);
 				if ((size() + n) > _max)
 				{
@@ -357,6 +359,8 @@ namespace ft {
 			template <class InputIterator>
 			void insert(iterator position, typename ft::enable_if<!(ft::is_integral<InputIterator>::value), InputIterator>::type first, InputIterator last) {
 				size_type n = ft::distance(first,  last);
+				if (n <= 0)
+					return ;
 				pointer pos = &(*position);
 				if ((size() + n) > _max)
 				{
