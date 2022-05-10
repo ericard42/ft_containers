@@ -11,7 +11,9 @@ set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
 
 add_executable(
 			ft_container
-			main.cpp
+			mains/vector_main.cpp
+			mains/map_main.cpp
+			mains/stack_main.cpp
 
 			containers/vector.hpp
 			containers/map.hpp
