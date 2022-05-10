@@ -30,5 +30,5 @@ add_executable(
 			utils/lexicographical_compare.hpp
 			utils/pair.hpp
 			utils/type_traits.hpp
-			utils/utils.hpp)
+)
 

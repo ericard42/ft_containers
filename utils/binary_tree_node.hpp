@@ -83,12 +83,6 @@ namespace ft {
 			void printNode() {
 				std::cout << "Key : " << getKey() << "\n";
 				std::cout << "Value : " << getValue() << "\n";
-				/*if (getParent() != NULL)
-					std::cout << "Key Parent : " << getParent()->getKey() << "\n";
-				if (getLeft() != NULL)
-					std::cout << "Key Left : " << getLeft()->getKey() << "\n";
-				if (getRight() != NULL)
-					std::cout << "Key Right : " << getRight()->getKey() << "\n";*/
 				std::cout << "--------------------" << std::endl;
 			}
 

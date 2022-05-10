@@ -78,6 +78,7 @@ namespace ft {
 				_alloc = allocator_type();
 			}
 
+			//Delete en récursif en enlevant les enfants en priorité.
 			void	treeDelete(node_ptr cur) {
 				if (_origin == NULL)
 					return ;
@@ -120,6 +121,8 @@ namespace ft {
 				return (cur);
 			}
 
+			//Comparer les deux valeurs jusqu'à avoir un espace vide où ajouter la data
+			// (Ou trouver la même valeur et ne rien ajouter)
 			node_ptr add(const value_type &pair) {
 				if (_origin == NULL)
 				{
@@ -168,6 +171,7 @@ namespace ft {
 				return (NULL);
 			}
 
+			//Trouver la valeur suivante. Sauf exceptions, next sera la data la plus à gauche de l'enfant à droite d'où on est.
 			node_ptr next(node_ptr cur) const {
 				if (!cur)
 					return (NULL);
@@ -182,13 +186,14 @@ namespace ft {
 				}
 				if (cur->getParent() == NULL)
 					return (_end);
-				while ((cur->getParent() != NULL) && /*(cur->getParent()->getLeft() != NULL) &&*/ (cur->getParent()->getLeft() != cur))
+				while ((cur->getParent() != NULL) && (cur->getParent()->getLeft() != cur))
 					cur = cur->getParent();
-				if ((cur->getParent() != NULL) && /*(cur->getParent()->getLeft() != NULL) &&*/ (cur->getParent()->getLeft() == cur))
+				if ((cur->getParent() != NULL) && (cur->getParent()->getLeft() == cur))
 					return (cur->getParent());
 				return (_end);
 			}
 
+			//Trouver la valeur précédente. Sauf exceptions, next sera la data la plus à droite de l'enfant à gauche d'où on est.
 			node_ptr prev(node_ptr cur) const {
 				if (!cur)
 					return (NULL);
@@ -203,13 +208,14 @@ namespace ft {
 				}
 				if (cur->getParent() == NULL)
 					return (_begin);
-				while ((cur->getParent() != NULL) && /*(cur->getParent()->getRight() != NULL) &&*/ (cur->getParent()->getRight() != cur))
+				while ((cur->getParent() != NULL) && (cur->getParent()->getRight() != cur))
 					cur = cur->getParent();
-				if ((cur->getParent() != NULL) && /*(cur->getParent()->getRight() != NULL) &&*/ (cur->getParent()->getRight() == cur))
+				if ((cur->getParent() != NULL) && (cur->getParent()->getRight() == cur))
 					return (cur->getParent());
 				return (_begin);
 			}
 
+			//Pas d'enfant, on supprime simplement la node.
 			void del_noChild(node_ptr &n_del) {
 				if (n_del == _origin)
 					_origin = NULL;
@@ -226,6 +232,7 @@ namespace ft {
 				_size--;
 			}
 
+			//Un enfant, on remplace simplement la node par son unique enfant.
 			void del_oneChild(node_ptr &n_del) {
 				node_ptr n_new;
 				node_ptr delParent;
@@ -254,31 +261,33 @@ namespace ft {
 				_size--;
 			}
 
+			//Deux enfants, on va remplacer la node par next.
 			void del_twoChild(node_ptr &n_del) {
 				node_ptr n_new = next(n_del);
 				node_ptr delParent;
 				node_ptr delLeft = n_del->getLeft();
 				node_ptr delRight = n_del->getRight();
 
+				//La node qui remplacera n'aura jamais d'enfant à sa gauche.
+
+				//Si on est directement à droite de la node à supprimer, on modifie seulement l'enfant de gauche.
 				if ((n_del->getRight()) && n_del->getRight() == n_new)
 				{
 					n_new->setLeft(delLeft);
 					delLeft->setParent(n_new);
 
 				}
+				//Si on n'est pas à droite de la node à supprimer, il faut lui donner ses deux nouveaux enfants.
 				else
 				{
-					//Possiblement retirer ce if, parce que forcement a gauche du parent si je suis dans le else
-					//if ((n_new->getParent()->getLeft()) && (n_new->getParent()->getLeft() == n_new))
-					//{
-						if (n_new->getRight() != NULL)
-						{
-							n_new->getRight()->setParent(n_new->getParent());
-							n_new->getParent()->setLeft(n_new->getRight());
-						}
-						else
-							n_new->getParent()->setLeft(NULL);
-					//}
+					//Si la node qui remplace a déjà un enfant à droite, ce dernier la remplacera à gauche de son parent.
+					if (n_new->getRight() != NULL)
+					{
+						n_new->getRight()->setParent(n_new->getParent());
+						n_new->getParent()->setLeft(n_new->getRight());
+					}
+					else
+						n_new->getParent()->setLeft(NULL);
 
 					n_new->setLeft(delLeft);
 					delLeft->setParent(n_new);
@@ -305,6 +314,7 @@ namespace ft {
 				_size--;
 			}
 
+			//Vérifier combien d'enfants a la node à delete.
 			void del(node_ptr &n_del) {
 				if (!n_del)
 					return ;
@@ -323,18 +333,6 @@ namespace ft {
 			void setOrigin(node_ptr cur) {
 				_origin = cur;
 			}
-
-			/*void setSize(size_type s) {
-				_size = s;
-			}
-
-			void setBegin(node_ptr cur) {
-				_begin = cur;
-			}
-
-			void setEnd(node_ptr cur) {
-				_end = cur;
-			}*/
 
 			node_ptr getOrigin() const {
 				return (_origin);
@@ -364,23 +362,6 @@ namespace ft {
 
 			size_type getSize() const {
 				return (_size);
-			}
-
-			void swap(Tree &x) {
-				node_ptr tmp_origin = x._origin;
-				node_ptr tmp_begin = x._begin;
-				node_ptr tmp_end = x._end;
-				size_type tmp_size = x._size;
-
-				x._origin =_origin;
-				x._begin =_begin;
-				x._end = _end;
-				x._size = _size;
-
-				_origin = tmp_origin;
-				_begin = tmp_begin;
-				_end = tmp_end;
-				_size = tmp_size;
 			}
 
 		private :

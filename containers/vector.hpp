@@ -4,7 +4,8 @@
 #include "../iterators/reverse_iterator.hpp"
 #include "../iterators/iterator_traits.hpp"
 #include "../iterators/random_iterator.hpp"
-#include "../utils/utils.hpp"
+#include "../utils/lexicographical_compare.hpp"
+#include "../utils/distance.hpp"
 #include "../utils/type_traits.hpp"
 #include "../utils/equal.hpp"
 #include <memory>

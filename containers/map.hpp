@@ -93,7 +93,6 @@ namespace ft {
 
 				for (const_iterator it = src.begin() ; it != src.end() ; it++)
 					insert(*it);
-				//_tree->setOrigin(_tree->treeCopy(src._tree->getOrigin()));
 				return (*this);
 			}
 
@@ -218,7 +217,6 @@ namespace ft {
 			}
 			//Swap
 			void swap (map &x) {
-				//_tree->swap(x._tree);
 				tree *tmp = x._tree;
 				x._tree = _tree;
 				_tree = tmp;

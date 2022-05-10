@@ -15,13 +15,6 @@ namespace ft {
 		template <class U1, class U2>
 		pair(const pair<U1, U2> &p) : first(p.first), second(p.second){}
 
-		//Operator=
-		/*pair &operator=(const pair &other) {
-			first = other.first;
-			second = other.second;
-			return (*this);
-		}*/
-
 		//Member objects
 		first_type first;
 		second_type second;
