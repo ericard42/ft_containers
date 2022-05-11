@@ -6,13 +6,14 @@ set(CMAKE_CXX_STANDARD 98)
 
 
 set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
+#set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98 -D STD")
 #set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98 -fsanitize=address")
 #set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -std=c++98")
 
 add_executable(
 			ft_container
-			mains/vector_main.cpp
-			mains/map_main.cpp
+			#mains/vector_main.cpp
+			#mains/map_main.cpp
 			mains/stack_main.cpp
 
 			containers/vector.hpp
