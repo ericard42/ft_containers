@@ -33,9 +33,9 @@ $(NAME_MAP)	:	$(SRCS_MAP)
 
 $(NAME_STACK):	$(SRCS_STACK)
 				$(CC) $(FLAGS) $(SRCS_STACK) -o $(NAME_STACK)
-				$(CC) $(FLAGS_STD) $(SRCS_MAP) -o $(NAME_MAP_S)
-				./$(NAME_MAP) > $(NAME_MAP).log
-				./$(NAME_MAP_S) > $(NAME_MAP_S).log
+				$(CC) $(FLAGS_STD) $(SRCS_STACK) -o $(NAME_STACK_S)
+				./$(NAME_STACK) > $(NAME_STACK).log
+				./$(NAME_STACK_S) > $(NAME_STACK_S).log
 
 clean		:
 				rm -rf $(NAME_VEC).log $(NAME_VEC_S).log
