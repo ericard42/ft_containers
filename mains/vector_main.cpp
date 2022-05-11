@@ -28,18 +28,12 @@ template <class T>
 void printRO(NAMESPACE::vector<T> &vec, NAMESPACE::vector<T> &vec2, int test) {
 	std::cout << "********** " << test << " **********" << std::endl;
 
-	std::cout << "->\t==\t<-" << std::endl;
-	std::cout << (vec == vec2) << std::endl;
-	std::cout << "->\t!=\t<-" << std::endl;
-	std::cout << (vec != vec2) << std::endl;
-	std::cout << "->\t<\t<-" << std::endl;
-	std::cout << (vec < vec2) << std::endl;
-	std::cout << "->\t<=\t<-" << std::endl;
-	std::cout << (vec <= vec2) << std::endl;
-	std::cout << "->\t>\t<-" << std::endl;
-	std::cout << (vec > vec2) << std::endl;
-	std::cout << "->\t>=\t<-" << std::endl;
-	std::cout << (vec >= vec2) << std::endl << std::endl;
+	std::cout << "==\t->\t" << (vec == vec2) << std::endl;
+	std::cout << "!=\t->\t" << (vec != vec2) << std::endl;
+	std::cout << "<\t->\t" << (vec < vec2) << std::endl;
+	std::cout << "<=\t->\t" << (vec <= vec2) << std::endl;
+	std::cout << ">\t->\t" << (vec > vec2) << std::endl;
+	std::cout << ">=\t->\t" << (vec >= vec2) << std::endl << std::endl;
 }
 
 #include <cstdio>
@@ -93,7 +87,7 @@ int main() {
 	//5 - Vecteur avec 15 valeurs, copie
 	print(vec_cp, test++);
 
-	//6 - Test Relationnal Operators
+	//6 - Test d'operateurs relationnels
 	printRO(vec, vec_cp, test++);
 
 	//Tout remplacer par 5 valeurs
@@ -112,7 +106,7 @@ int main() {
 	//8 - Vecteur avec 10 valeurs
 	print(vec_cp, test++);
 
-	//9 - Test Relationnal Operators
+	//9 - Test d'operateurs relationnels
 	printRO(vec, vec_cp, test++);
 
 	it_cp = vec_cp.begin();
@@ -128,25 +122,25 @@ int main() {
 	std::cout << "Première valeur de vec_cp, avec itérateur anciennement sur vec" << std::endl;
 	std::cout << *it << std::endl << std::endl;
 
-	//12 - Test Relationnal Operators
+	//12 - Test d'operateurs relationnels
 	printRO(vec, vec_cp, test++);
 
 	//Test operator = avec contenu dans les 2 vecteurs.
 	vec_cp = vec;
 	//13 - Vecteur copié avec 10 valeurs
 	print(vec, test++);
-	//Copie du vecteur, avec 10 valeurs
+	//14 - Copie du vecteur, avec 10 valeurs
 	print(vec_cp, test++);
 
-	//14 - Test relationnal Operators
+	//15 - Test Test d'operateurs relationnels
 	printRO(vec, vec_cp, test++);
 
 	//Vérifier que c'est bien une deep copy
 	vec_cp.push_back(42);
-	//15 - Vecteur avec 11 valeurs
+	//16 - Vecteur avec 11 valeurs
 	print(vec_cp, test++);
 
-	//16 - Vérifier que les vecteurs ne sont pas égaux.
+	//17 - Vérifier que les vecteurs ne sont pas égaux.
 	printRO(vec, vec_cp, test++);
 }
 
