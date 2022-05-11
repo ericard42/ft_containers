@@ -34,3 +34,4 @@
 containers_test/
 cmake-build-debug/
 42TESTERS-CONTAINERS/
+*_test*
