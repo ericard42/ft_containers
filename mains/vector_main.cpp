@@ -12,7 +12,6 @@ void print(NAMESPACE::vector<T>& vec, int test) {
 	std::cout << "********** " << test << " **********" << std::endl;
 	std::cout << "Size : " << vec.size() << std::endl;
 	std::cout << "Empty : " << vec.empty() << std::endl;
-	std::cout << "Capacity : " << vec.capacity() << std::endl;
 	std::cout << std::endl;
 	std::cout << "Contain :" << std::endl;
 
@@ -25,7 +24,32 @@ void print(NAMESPACE::vector<T>& vec, int test) {
 	std::cout << std::endl;
 }
 
+template <class T>
+void printRO(NAMESPACE::vector<T> &vec, NAMESPACE::vector<T> &vec2, int test) {
+	std::cout << "********** " << test << " **********" << std::endl;
+
+	std::cout << "->\t==\t<-" << std::endl;
+	std::cout << (vec == vec2) << std::endl;
+	std::cout << "->\t!=\t<-" << std::endl;
+	std::cout << (vec != vec2) << std::endl;
+	std::cout << "->\t<\t<-" << std::endl;
+	std::cout << (vec < vec2) << std::endl;
+	std::cout << "->\t<=\t<-" << std::endl;
+	std::cout << (vec <= vec2) << std::endl;
+	std::cout << "->\t>\t<-" << std::endl;
+	std::cout << (vec > vec2) << std::endl;
+	std::cout << "->\t>=\t<-" << std::endl;
+	std::cout << (vec >= vec2) << std::endl << std::endl;
+}
+
+#include <cstdio>
+
 int main() {
+	#ifndef STD
+		std::cout << "****** Test with FT ******" << std::endl;
+	#else
+		std::cout << "****** Test with STD ******" << std::endl;
+	#endif
 	int test = 1;
 	NAMESPACE::vector<int> vec;
 
@@ -69,9 +93,12 @@ int main() {
 	//5 - Vecteur avec 15 valeurs, copie
 	print(vec_cp, test++);
 
+	//6 - Test Relationnal Operators
+	printRO(vec, vec_cp, test++);
+
 	//Tout remplacer par 5 valeurs
 	vec_cp.assign(5, 42);
-	//6 - Vecteur avec 5 valeurs
+	//7 - Vecteur avec 5 valeurs
 	print(vec_cp, test++);
 
 	it = vec.begin();
@@ -82,25 +109,46 @@ int main() {
 	NAMESPACE::vector<int>::iterator it_cp = vec_cp.begin();
 	//Ajouter les valeurs [10] à [14] (5 valeurs) de vec à [0] de vec_cp
 	vec_cp.insert(it_cp, it, ite);
-	//7 - Vecteur avec 10 valeurs
+	//8 - Vecteur avec 10 valeurs
 	print(vec_cp, test++);
+
+	//9 - Test Relationnal Operators
+	printRO(vec, vec_cp, test++);
 
 	it_cp = vec_cp.begin();
 	it = vec.begin();
 	swap(vec, vec_cp);
-	//8 - Vecteur avec 10 valeurs
+	//10 - Vecteur avec 10 valeurs
 	print(vec, test++);
-	//9 - Vecteur avec 15 valeurs
+	//11 - Vecteur avec 15 valeurs
 	print(vec_cp, test++);
 	std::cout << "****** Itérateurs après swap ******" << std::endl;
 	std::cout << "Première valeur de vec, avec itérateur anciennement sur vec_cp" << std::endl;
 	std::cout << *it_cp << std::endl;
 	std::cout << "Première valeur de vec_cp, avec itérateur anciennement sur vec" << std::endl;
-	std::cout << *it << std::endl;
+	std::cout << *it << std::endl << std::endl;
 
+	//12 - Test Relationnal Operators
+	printRO(vec, vec_cp, test++);
 
+	//Test operator = avec contenu dans les 2 vecteurs.
+	vec_cp = vec;
+	//13 - Vecteur copié avec 10 valeurs
+	print(vec, test++);
+	//Copie du vecteur, avec 10 valeurs
+	print(vec_cp, test++);
+
+	//14 - Test relationnal Operators
+	printRO(vec, vec_cp, test++);
+
+	//Vérifier que c'est bien une deep copy
+	vec_cp.push_back(42);
+	//15 - Vecteur avec 11 valeurs
+	print(vec_cp, test++);
+
+	//16 - Vérifier que les vecteurs ne sont pas égaux.
+	printRO(vec, vec_cp, test++);
 }
 
-//TODO Ajouter les operateurs relationnels
 
 
