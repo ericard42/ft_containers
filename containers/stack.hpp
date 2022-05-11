@@ -20,10 +20,6 @@ namespace ft {
 			~stack() {
 
 			}
-			//Operator=
-			stack &operator=(const stack &other) {
-				return (c = other.c);
-			}
 
 			//Empty
 			bool empty() {
