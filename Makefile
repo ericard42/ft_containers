@@ -15,9 +15,7 @@ SRCS_MAP	=	mains/map_main.cpp
 SRCS_STACK	=	mains/stack_main.cpp
 
 
-all		:	$(NAME_VEC)
-			$(NAME_MAP)
-			$(NAME_STACK)
+all		:	$(NAME_VEC) $(NAME_MAP) $(NAME_STACK)
 
 $(NAME_VEC)	:	$(SRCS_VEC)
 				$(CC) $(FLAGS) $(SRCS_VEC) -o $(NAME_VEC)
